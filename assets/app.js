@@ -1387,6 +1387,21 @@ function saveProfileFromForm(){
       if(!el) return;
       el.addEventListener("click", (e)=>{ e.preventDefault(); fn(); });
     };
+
+    // Navigation (no inline onclick)
+    document.querySelectorAll(".menu-item[data-view]").forEach((btn)=>{
+      btn.addEventListener("click", (e)=>{
+        e.preventDefault();
+        const viewId = btn.getAttribute("data-view");
+        if(viewId) switchView(viewId);
+      });
+    });
+
+    // Header / actions (no inline onclick)
+    bind("btnExportCsv", exportCsv);
+    bind("btnPdfReport", openPdfReport);
+    bind("btnPrintChart", printChart);
+
     bind("btnAddStudent", addStudent);
     bind("btnAddTeacher", addTeacher);
     bind("btnAddTask", addTask);

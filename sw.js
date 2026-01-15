@@ -1,10 +1,10 @@
 /* DTT記録ツール PWA Service Worker (v2: safer updates) */
-const CACHE_NAME = "dtt-cache-v18-1768435147";
+const CACHE_NAME = "dtt-cache-v19-1768435795";
 const CORE_ASSETS = [
   "./",
   "./index.html",
   "./manifest.json",
-  "./assets/app.js?v=1768435147",
+  "./assets/app.js?v=1768435795",
   "./assets/icons/icon-192.png",
   "./assets/icons/icon-512.png"
 ];

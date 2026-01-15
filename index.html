@@ -959,25 +959,25 @@
       <div class="app-logo-icon">AB</div>
       <div class="app-logo-text">
         <div class="app-logo-title">DTT記録ツール</div>
-        <div class="app-logo-sub">スクパス風ビュー</div>
+        <div class="app-logo-sub"></div>
       </div>
     </div>
     <div class="menu-label">メニュー</div>
     <nav class="side-menu">
-      <button class="menu-item active" data-view="view-home" onclick="switchView('view-home')">
+      <button type="button" class="menu-item active" data-view="view-home">
         <span class="icon">🏠</span><span class="label">ホーム</span>
       </button>
-      <button class="menu-item" data-view="view-session" onclick="switchView('view-session')">
+      <button type="button" class="menu-item" data-view="view-session">
         <span class="icon">✏️</span><span class="label">DTT記録</span>
       </button>
-      <button class="menu-item" data-view="view-master" onclick="switchView('view-master')">
+      <button type="button" class="menu-item" data-view="view-master">
         <span class="icon">🧩</span><span class="label">生徒情報・設定</span>
       </button>
       
-      <button class="menu-item" data-view="view-students" onclick="switchView('view-students')">
+      <button type="button" class="menu-item" data-view="view-students">
         <span class="icon">👤</span><span class="label">生徒リスト</span>
       </button>
-<button class="menu-item" data-view="view-logs" onclick="switchView('view-logs')">
+<button type="button" class="menu-item" data-view="view-logs">
         <span class="icon">📋</span><span class="label">記録一覧・グラフ</span>
       </button>
     </nav>
@@ -1188,7 +1188,7 @@
           <label style="margin-top:10px;">メモ（任意）</label>
           <textarea id="sessionNote" placeholder="例：今日は集中しやすく、プロンプトを減らしても成功が維持できた　など"></textarea>
 
-          <button class="btn btn-save" onclick="saveSession()">このDTT記録を保存</button>
+          <button class="btn btn-save">このDTT記録を保存</button>
         </div>
       </section>
 
@@ -1233,7 +1233,7 @@
         <div class="panel-body">
           <div class="inline-form">
             <input class="input" id="newStudentName" placeholder="生徒の追加（例：Aくん）" />
-            <button class="btn btn-primary btn-compact" id="btnAddStudent">登録</button>
+            <button type="button" class="btn btn-primary btn-compact" id="btnAddStudent">登録</button>
           </div>
           <div class="panel-list" id="studentList">まだ登録がありません。</div><div class="master-list-hint">※タグをクリックで編集、×で削除</div>
         </div>
@@ -1248,7 +1248,7 @@
         <div class="panel-body">
           <div class="inline-form">
             <input class="input" id="newTeacherName" placeholder="講師の追加（例：中安先生）" />
-            <button class="btn btn-primary btn-compact" id="btnAddTeacher">登録</button>
+            <button type="button" class="btn btn-primary btn-compact" id="btnAddTeacher">登録</button>
           </div>
           <div class="panel-list" id="teacherList">まだ登録がありません。</div><div class="master-list-hint">※タグをクリックで編集、×で削除</div>
         </div>
@@ -1263,7 +1263,7 @@
         <div class="panel-body">
           <div class="inline-form">
             <input class="input" id="newTaskName" placeholder="課題の追加（例：動作模倣）" />
-            <button class="btn btn-primary btn-compact" id="btnAddTask">登録</button>
+            <button type="button" class="btn btn-primary btn-compact" id="btnAddTask">登録</button>
           </div>
           <div class="panel-list" id="taskList">まだ登録がありません。</div><div class="master-list-hint">※タグをクリックで編集、×で削除</div>
         </div>
@@ -1278,7 +1278,7 @@
         <div class="panel-body">
           <div class="inline-form">
             <input class="input" id="newReinforcerName" placeholder="強化子の追加（例：タブレット / 好きなお菓子）" />
-            <button class="btn btn-primary btn-compact" id="btnAddReinforcer">登録</button>
+            <button type="button" class="btn btn-primary btn-compact" id="btnAddReinforcer">登録</button>
           </div>
           <div class="panel-list" id="reinforcerList">まだ登録がありません。</div><div class="master-list-hint">※タグをクリックで編集、×で削除</div>
         </div>
@@ -1308,7 +1308,7 @@
             <input class="input" id="newTargetSD" placeholder="例：「こうして」" />
           </div>
           <div class="target-grid-actions">
-            <button class="btn btn-primary" id="btnAddTarget">ターゲット行動を登録</button>
+            <button type="button" class="btn btn-primary" id="btnAddTarget">ターゲット行動を登録</button>
           </div>
         </div>
 
@@ -1449,8 +1449,8 @@
             生徒・課題・ターゲット行動ごとに記録を確認できます。（メモ・強化子・プロンプト種類も表示）
           </div>
           <div style="text-align:right;margin-bottom:4px;">
-            <button class="btn btn-outline" onclick="exportCsv()">CSVエクスポート</button>
-            <button class="btn btn-outline" onclick="openPdfReport()">PDFレポート（印刷用）</button>
+            <button class="btn btn-outline" id="btnExportCsv">CSVエクスポート</button>
+            <button class="btn btn-outline" id="btnPdfReport">PDFレポート（印刷用）</button>
           </div>
           <div id="sessionList"></div>
         </div>
@@ -1463,7 +1463,7 @@
             フィルタに合わせた成功率の推移を確認できます。
           </div>
           <div style="text-align:right;margin-top:4px;">
-            <button class="btn btn-outline" onclick="printChart()">グラフを印刷</button>
+            <button class="btn btn-outline" id="btnPrintChart">グラフを印刷</button>
           </div>
           <canvas id="sessionChart" height="220" style="margin-top:8px;"></canvas>
         </div>
@@ -1483,7 +1483,7 @@
   </main>
 </div>
 
-  <script src="./assets/app.js?v=1768435147"></script>
+  <script src="./assets/app.js?v=1768435795"></script>
   <div id="toastHost" class="toast-host" aria-live="polite"></div>
 </body>
 </html>
