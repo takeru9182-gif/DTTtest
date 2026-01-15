@@ -2,11 +2,14 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>DTT記録ツール <span style='font-size:12px;opacity:.75;font-weight:700'>(v22)</span></title>
+  <title>ABA（DTT）記録ツール（フル機能版）</title>
+
+  <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#2563eb">
   <link rel="apple-touch-icon" href="./assets/icons/icon-180.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     :root {
@@ -416,6 +419,7 @@
         padding: 10px 10px 16px;
       }
     }
+  
     /* --- 生徒リスト（追加） --- */
     .profile-card-list{
       display:grid;
@@ -436,474 +440,7 @@
     .profile-card .name{ font-weight:800; }
     .profile-card .meta{ color:#64748b; font-size:12px; margin-top:4px; }
     .profile-card .note{ color:#0f172a; font-size:12px; margin-top:6px; line-height:1.45; }
-    /* =========================
-       Mobile polish (v4)
-       ========================= */
-    @media (max-width: 900px){
-      body{ padding: 0; }
-      .app{ padding: 10px; }
-      .layout{ flex-direction: column; gap: 10px; }
-      .sidebar{
-        width: 100%;
-        position: sticky;
-        top: 0;
-        z-index: 20;
-        border-radius: 14px;
-        overflow: hidden;
-      }
-      .sidebar-inner{
-        display:flex;
-        flex-direction: row;
-        gap: 6px;
-        overflow-x: auto;
-        padding: 10px;
-        -webkit-overflow-scrolling: touch;
-      }
-      .sidebar .brand{ display:none; }
-      .menu-item{
-        flex: 0 0 auto;
-        padding: 10px 12px;
-        border-radius: 12px;
-        white-space: nowrap;
-      }
-      .menu-item .icon{ margin-right: 6px; }
-      .content{ width: 100%; }
-      .card{ padding: 12px; border-radius: 16px; }
-      .card-title{ font-size: 16px; gap: 8px; }
-      .card-description{ font-size: 13px; line-height: 1.55; }
-      /* forms */
-      .form-grid{ grid-template-columns: 1fr !important; gap: 10px; }
-      .form-field .form-label{ font-size: 12px; }
-      .input, .select, .textarea{ font-size: 14px; padding: 12px 12px; }
-      .textarea{ min-height: 110px; }
-      /* buttons */
-      .btn-row{ gap: 8px; flex-wrap: wrap; }
-      .btn{ width: 100%; justify-content: center; padding: 12px 12px; }
-      .btn.btn-outline{ width: 100%; }
-      /* tables */
-      .table-wrap{ overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 12px; }
-      table{ min-width: 720px; } /* allow scroll instead of squish */
-      th, td{ padding: 10px 10px; }
-      th{ font-size: 12px; }
-      td{ font-size: 13px; }
-      td.num, th.num{ text-align: right; font-variant-numeric: tabular-nums; }
-      td.center, th.center{ text-align: center; }
-      /* chips */
-      .tag{ padding: 6px 10px; border-radius: 999px; font-size: 12px; }
-      /* profile cards grid */
-      .profile-card-list{ grid-template-columns: 1fr !important; }
-    }
-    @media (max-width: 380px){
-      .menu-item .label{ display:none; } /* icons only on very small screens */
-      .menu-item .icon{ margin-right: 0; }
-    }
-    /* =========================
-       Spacing & type tidy (v5)
-       ========================= */
-    :root{
-      --sp-1: 4px;
-      --sp-2: 8px;
-      --sp-3: 12px;
-      --sp-4: 16px;
-      --sp-5: 20px;
-      --fs-1: 12px;
-      --fs-2: 13px;
-      --fs-3: 14px;
-      --fs-4: 16px;
-      --fs-5: 18px;
-      --lh: 1.55;
-    }
-    /* Normalize */
-    *{ box-sizing: border-box; }
-    .card, .sidebar, .menu-item, .btn, .input, .select, .textarea{ border-radius: 14px; }
-    .card{ padding: var(--sp-4); }
-    .card-title{
-      font-size: var(--fs-5);
-      line-height: 1.25;
-      margin: 0;
-      padding: 0;
-      gap: var(--sp-2);
-      align-items: center;
-    }
-    .card-title .emoji{ font-size: 18px; }
-    .card-description{
-      margin-top: var(--sp-2);
-      font-size: var(--fs-2);
-      line-height: var(--lh);
-    }
-    .divider{ margin: var(--sp-4) 0; opacity: .85; }
-    .form-grid{ gap: var(--sp-3); }
-    .form-field{ margin: 0; }
-    .form-label{ font-size: var(--fs-1); margin-bottom: var(--sp-1); }
-    .hint-text, .note-text{ font-size: var(--fs-1); line-height: var(--lh); margin-top: var(--sp-1); }
-    .input, .select, .textarea{
-      font-size: var(--fs-3);
-      padding: 12px 12px;
-      line-height: 1.3;
-    }
-    .textarea{ min-height: 120px; }
-    .btn-row{ gap: var(--sp-2); margin-top: var(--sp-3); }
-    .btn{
-      font-size: var(--fs-3);
-      padding: 12px 12px;
-      min-height: 44px;
-    }
-    .tag{
-      font-size: var(--fs-1);
-      padding: 6px 10px;
-      margin: 0 var(--sp-2) var(--sp-2) 0;
-      border-radius: 999px;
-      line-height: 1.2;
-      white-space: nowrap;
-    }
-    /* Sidebar/menu sizing consistency */
-    .menu-item{
-      min-height: 44px;
-      gap: var(--sp-1);
-      font-size: var(--fs-2);
-      padding: 10px 12px;
-      align-items: center;
-    }
-    .menu-item .icon{ font-size: 16px; line-height: 1; }
-    /* Table readability + aligned columns */
-    th, td{ font-variant-numeric: tabular-nums; }
-    th{ font-size: var(--fs-1); }
-    td{ font-size: var(--fs-2); }
-    /* Mobile fine-tuning: reduce wasted space */
-    @media (max-width: 900px){
-      .app{ padding: 8px; }
-      .card{ padding: 12px; }
-      .sidebar-inner{ padding: 8px; gap: 6px; }
-      .menu-item{ padding: 10px 12px; }
-      .card-title{ font-size: var(--fs-4); }
-      .card-description{ font-size: var(--fs-2); }
-      .divider{ margin: 12px 0; }
-      .btn-row{ margin-top: 10px; }
-      .input, .select, .textarea{ padding: 12px 12px; }
-    }
-    @media (max-width: 380px){
-      .app{ padding: 6px; }
-      .sidebar-inner{ padding: 6px; }
-      .card{ padding: 10px; }
-    }
-    /* =========================
-       UX upgrade (v8)
-       ========================= */
-    :root{
-      --surface: rgba(255,255,255,.80);
-      --surface-2: rgba(255,255,255,.62);
-      --stroke: rgba(148,163,184,.35);
-      --shadow: 0 14px 32px rgba(15,23,42,.10);
-      --shadow-2: 0 10px 22px rgba(15,23,42,.08);
-      --radius: 16px;
-      --radius-lg: 20px;
-    }
-    .card{ box-shadow: var(--shadow); border: 1px solid var(--stroke); }
-    .btn{ box-shadow: var(--shadow-2); }
-    .btn-outline{ box-shadow: none; }
-    .steps{
-      display:flex;
-      gap:8px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-      margin-bottom: 10px;
-    }
-    .step{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      padding: 8px 10px;
-      border: 1px solid var(--stroke);
-      border-radius: 999px;
-      background: var(--surface-2);
-      font-size: 12px;
-      color: #0f172a;
-    }
-    .step-num{
-      width: 22px;
-      height: 22px;
-      display:grid;
-      place-items:center;
-      border-radius: 999px;
-      background: rgba(37,99,235,.12);
-      color: #1d4ed8;
-      font-weight: 800;
-      font-variant-numeric: tabular-nums;
-    }
-    .trial-board{
-      margin-top: 10px;
-      border: 1px solid var(--stroke);
-      background: var(--surface);
-      border-radius: var(--radius-lg);
-      padding: 12px;
-    }
-    .trial-metrics{
-      display:grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-    }
-    .metric{
-      border: 1px solid rgba(148,163,184,.28);
-      background: rgba(255,255,255,.68);
-      border-radius: var(--radius);
-      padding: 10px;
-      min-height: 72px;
-    }
-    .metric-wide{ grid-column: span 1; }
-    .metric-label{
-      font-size: 12px;
-      color: #475569;
-      font-weight: 700;
-    }
-    .metric-value{
-      margin-top: 6px;
-      font-size: 26px;
-      font-weight: 900;
-      letter-spacing: .2px;
-      color: #0f172a;
-    }
-    .metric-suffix{ font-size: 14px; margin-left: 4px; color:#334155; font-weight: 800; }
-    .trial-actions{
-      display:grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .btn-big{
-      min-height: 52px;
-      font-size: 16px;
-      font-weight: 800;
-      border-radius: 16px;
-    }
-    .trial-secondary{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .save-bar{
-      position: sticky;
-      bottom: 10px;
-      margin-top: 14px;
-      padding: 10px 12px;
-      border-radius: 18px;
-      border: 1px solid rgba(148,163,184,.35);
-      background: rgba(15,23,42,.90);
-      color: #e2e8f0;
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      gap: 12px;
-      box-shadow: 0 16px 44px rgba(2,6,23,.35);
-      backdrop-filter: blur(10px);
-    }
-    .save-bar-title{ font-weight: 900; font-size: 13px; }
-    .save-bar-sub{ font-size: 12px; color: rgba(226,232,240,.82); margin-top: 2px; }
-    .save-bar .btn{ box-shadow: none; min-height: 44px; border-radius: 14px; }
-    /* Mobile: metrics wrap + less wasted space */
-    @media (max-width: 900px){
-      .trial-metrics{ grid-template-columns: 1fr 1fr; }
-      .metric-wide{ grid-column: span 2; }
-      .metric-value{ font-size: 24px; }
-      .trial-actions{ grid-template-columns: 1fr; }
-      .trial-secondary{ grid-template-columns: 1fr; }
-      .save-bar{ bottom: 8px; }
-    }
-    .section-hd{
-      margin-top: 12px;
-      margin-bottom: 6px;
-      font-size: 12px;
-      font-weight: 900;
-      color: #0f172a;
-      opacity: .85;
-    }
-    .tag-wrap{ display:flex; flex-wrap:wrap; gap:8px; }
-    .muted{ opacity: .65; font-size: 11px; font-weight: 700; }
-    /* =========================
-       Settings redesign (v12)
-       ========================= */
-    .panel-grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 14px;
-    }
-    .panel{
-      border: 1px solid rgba(148,163,184,.30);
-      background: rgba(255,255,255,.70);
-      border-radius: 18px;
-      overflow: hidden;
-    }
-    .panel-wide{ grid-column: 1 / -1; }
-    .panel-hd{
-      padding: 12px 14px;
-      border-bottom: 1px solid rgba(148,163,184,.22);
-      background: rgba(248,250,252,.85);
-      display:flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .panel-title{ font-weight: 900; font-size: 14px; color:#0f172a; }
-    .panel-sub{ font-size: 12px; color:#475569; }
-    .panel-body{ padding: 12px 14px; }
-    .inline-form{
-      display:grid;
-      grid-template-columns: 1fr 110px;
-      gap: 10px;
-      align-items: center;
-    }
-    .btn-compact{ min-height: 44px; }
-    .panel-list{
-      margin-top: 10px;
-      display:flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: flex-start;
-      min-height: 38px;
-    }
-    .panel-list .tag{ margin: 0; }
-    .target-grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr 1fr auto;
-      gap: 10px;
-      align-items: end;
-    }
-    .target-grid-actions{ display:flex; }
-    .target-grid-actions .btn{ min-width: 180px; }
-    .details{
-      margin-top: 12px;
-      border: 1px solid rgba(148,163,184,.22);
-      border-radius: 14px;
-      background: rgba(255,255,255,.65);
-      padding: 10px 12px;
-    }
-    .details > summary{
-      cursor: pointer;
-      font-weight: 900;
-      font-size: 13px;
-      color:#0f172a;
-      list-style: none;
-    }
-    .details > summary::-webkit-details-marker{ display:none; }
-    .details[open] > summary{ margin-bottom: 10px; }
-    .edit-sd{ max-width: 560px; }
-    @media (max-width: 900px){
-      .panel-grid{ grid-template-columns: 1fr; }
-      .inline-form{ grid-template-columns: 1fr; }
-      .target-grid{ grid-template-columns: 1fr; }
-      .target-grid-actions .btn{ width: 100%; min-width: 0; }
-    }
-    /* =========================
-       Production UX pack (v14)
-       ========================= */
-    .master-list-hint{
-      margin-top: 6px;
-      font-size: 12px;
-      color: #64748b;
-      line-height: 1.4;
-    }
-    .tag.editable{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      cursor:pointer;
-      user-select:none;
-    }
-    .tag .x{
-      display:inline-grid;
-      place-items:center;
-      width:18px;
-      height:18px;
-      border-radius:999px;
-      background: rgba(15,23,42,.08);
-      color:#0f172a;
-      font-weight: 900;
-      line-height: 1;
-      cursor:pointer;
-    }
-    .tag .x:hover{ background: rgba(15,23,42,.14); }
-    .errors{
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(239,68,68,.35);
-      background: rgba(254,242,242,.85);
-      color: #7f1d1d;
-      font-size: 13px;
-      line-height: 1.55;
-      font-weight: 800;
-    }
-    .errors ul{ margin: 0; padding-left: 18px; }
-    .errors li{ margin: 2px 0; }
-    .is-invalid{
-      outline: 2px solid rgba(239,68,68,.35);
-      border-color: rgba(239,68,68,.55) !important;
-      background: rgba(254,242,242,.60) !important;
-    }
-    /* =========================
-       Enterprise polish (v15)
-       ========================= */
-    .facility-badge{
-      margin-left: 10px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-weight: 900;
-      font-size: 12px;
-      color: #0f172a;
-      background: rgba(37,99,235,.12);
-      border: 1px solid rgba(37,99,235,.25);
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      vertical-align: middle;
-    }
-    .chk{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      font-weight: 800;
-      color:#0f172a;
-      font-size: 13px;
-      user-select:none;
-    }
-    .chk input{ width:18px; height:18px; }
-    .toast-host{
-      position: fixed;
-      z-index: 9999;
-      left: 12px;
-      right: 12px;
-      bottom: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      pointer-events: none;
-      max-width: 680px;
-      margin: 0 auto;
-    }
-    .toast{
-      pointer-events: none;
-      border-radius: 16px;
-      padding: 12px 14px;
-      border: 1px solid rgba(148,163,184,.25);
-      background: rgba(2,6,23,.92);
-      color: #e5e7eb;
-      font-weight: 800;
-      font-size: 13px;
-      line-height: 1.4;
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-      transform: translateY(10px);
-      opacity: 0;
-      transition: opacity .18s ease, transform .18s ease;
-    }
-    .toast.show{ opacity: 1; transform: translateY(0); }
-    .toast .t-title{ font-weight: 900; }
-    .toast .t-sub{ font-weight: 700; color: rgba(229,231,235,.85); margin-top: 2px; }
-    .toast.success{ border-color: rgba(34,197,94,.35); }
-    .toast.warn{ border-color: rgba(245,158,11,.35); }
-    .toast.error{ border-color: rgba(239,68,68,.35); }
+
   </style>
   </head>
 <body>
@@ -912,8 +449,8 @@
     <div class="app-logo">
       <div class="app-logo-icon">AB</div>
       <div class="app-logo-text">
-        <div class="app-logo-title">DTT記録ツール</div>
-        <div class="app-logo-sub"></div>
+        <div class="app-logo-title">ABA（DTT）記録ツール</div>
+        <div class="app-logo-sub">スクパス風ビュー</div>
       </div>
     </div>
     <div class="menu-label">メニュー</div>
@@ -922,11 +459,12 @@
         <span class="icon">🏠</span><span class="label">ホーム</span>
       </button>
       <button class="menu-item" data-view="view-session" onclick="switchView('view-session')">
-        <span class="icon">✏️</span><span class="label">DTT記録</span>
+        <span class="icon">✏️</span><span class="label">ABA（DTT）記録</span>
       </button>
       <button class="menu-item" data-view="view-master" onclick="switchView('view-master')">
         <span class="icon">🧩</span><span class="label">生徒情報・設定</span>
       </button>
+      
       <button class="menu-item" data-view="view-students" onclick="switchView('view-students')">
         <span class="icon">👤</span><span class="label">生徒リスト</span>
       </button>
@@ -939,6 +477,7 @@
       ・PC / iPhone / iPad のブラウザから利用できます。
     </div>
   </aside>
+
   <main class="main">
     <div class="app-container">
       <header class="topbar">
@@ -946,10 +485,11 @@
           <h1 id="currentViewTitle">ホーム</h1>
         </div>
       </header>
+
       <!-- ホーム -->
       <section id="view-home" class="view view-active">
         <div class="card">
-          <div class="card-title"><span class="emoji">🏠</span><span id="facilityBadge" class="facility-badge" style="display:none;"></span><span>ホームサマリー</span></div>
+          <div class="card-title"><span class="emoji">🏠</span><span>ホームサマリー</span></div>
           <div class="card-description">
             <div id="installHint" class="hint-text" style="margin-top:10px; display:none;">
               アプリとして追加できます（Android/PC: 右上のインストール / iPhone: 共有→「ホーム画面に追加」）
@@ -957,6 +497,7 @@
             <div class="btn-row" style="margin-top:10px;">
               <button class="btn" id="btnInstallPwa" style="display:none;">アプリとしてインストール</button>
             </div>
+        
             全体の状況と、生徒ごとの最新状況を一覧で確認できます。
           </div>
           <div class="kpi-row">
@@ -974,65 +515,23 @@
             </div>
           </div>
           <div class="note-text" id="dashLastSession" style="margin-top:8px;">
-            まだDTT記録がありません。
+            まだABA（DTT）記録がありません。
           </div>
           <div class="note-text" style="margin-top:10px;font-weight:600;">
             生徒ごとの最新状況
           </div>
-          <div class="table-wrap"><table class="home-student-table" id="homeStudentTable"></table></div>
+          <table class="home-student-table" id="homeStudentTable"></table>
         </div>
       </section>
-      <!-- DTT記録 -->
+
+      <!-- ABA（DTT）記録 -->
       <section id="view-session" class="view">
         <div class="card">
-          <div class="card-title"><span class="emoji">✏️</span><span>DTT記録（＋ / － / P）</span></div>
+          <div class="card-title"><span class="emoji">✏️</span><span>ABA（DTT）記録（＋ / － / P）</span></div>
           <div class="card-description">
             生徒・課題・ターゲット行動・講師・強化子を選び、試行を＋/－/Pで記録します。簡単なメモも残せます。
           </div>
-        <div id="sessionErrors" class="errors" style="display:none;"></div>
-          <div id="sessionSteps" class="steps">
-            <div class="step"><span class="step-num">1</span><span class="step-txt">生徒</span></div>
-            <div class="step"><span class="step-num">2</span><span class="step-txt">課題</span></div>
-            <div class="step"><span class="step-num">3</span><span class="step-txt">標的</span></div>
-            <div class="step"><span class="step-num">4</span><span class="step-txt">試行</span></div>
-            <div class="step"><span class="step-num">5</span><span class="step-txt">保存</span></div>
-          </div>
-          <div class="trial-board">
-            <div class="trial-metrics">
-              <div class="metric">
-                <div class="metric-label">成功（＋）</div>
-                <div class="metric-value" id="countPlusBig">0</div>
-              </div>
-              <div class="metric">
-                <div class="metric-label">失敗（－）</div>
-                <div class="metric-value" id="countMinusBig">0</div>
-              </div>
-              <div class="metric">
-                <div class="metric-label">P</div>
-                <div class="metric-value" id="countPBig">0</div>
-              </div>
-              <div class="metric metric-wide">
-                <div class="metric-label">成功率</div>
-                <div class="metric-value"><span id="rateBig">0</span><span class="metric-suffix">%</span></div>
-              </div>
-            </div>
-            <div class="trial-actions">
-              <button class="btn btn-success btn-big" id="btnTrialPlus">＋ 成功</button>
-              <button class="btn btn-fail btn-big" id="btnTrialMinus">－ 失敗</button>
-              <button class="btn btn-prompt btn-big" id="btnTrialP">P</button>
-            </div>
-            <div class="trial-secondary">
-              <button class="btn btn-outline" id="btnUndoTrial">ひとつ戻す</button>
-              <button class="btn btn-outline" id="btnResetTrial">試行をリセット</button>
-            </div>
-          </div>
-          <div class="save-bar" id="saveBar">
-            <div class="save-bar-left">
-              <div class="save-bar-title">入力が終わったら保存</div>
-              <div class="save-bar-sub">迷ったらメモだけでもOK</div>
-            </div>
-            <button class="btn" id="btnSaveSessionSticky">保存する</button>
-          </div>
+
           <div class="row">
             <div>
               <label>生徒</label>
@@ -1062,6 +561,7 @@
               </select>
             </div>
           </div>
+
           <div class="row">
             <div>
               <label>強化子（1位〜5位）</label>
@@ -1092,14 +592,36 @@
             <div>
               <label>トライアル目標回数</label>
               <input id="trialGoal" type="number" value="10" min="1" max="30">
-</div>
+              <label style="margin-top:6px;">プロンプトの種類（任意）</label>
+              <select id="promptType">
+                <option value="">未指定</option>
+                <option value="全身体プロンプト">全身体プロンプト</option>
+                <option value="部分身体プロンプト">部分身体プロンプト</option>
+                <option value="ジェスチャー">ジェスチャー</option>
+                <option value="口頭プロンプト">口頭プロンプト</option>
+                <option value="その他">その他</option>
+              </select>
+            </div>
           </div>
+
           <label style="margin-top:10px;">トライアル入力（＋ / － / P）</label>
+          <div class="row" style="margin-top:4px;">
+            <div style="flex:1;min-width:100px;">
+              <button class="btn btn-success" style="width:100%;" onclick="addTrial('+')">成功（＋）</button>
+            </div>
+            <div style="flex:1;min-width:100px;">
+              <button class="btn btn-fail" style="width:100%;" onclick="addTrial('-')">失敗（－）</button>
+            </div>
+            <div style="flex:1;min-width:100px;">
+              <button class="btn btn-prompt" style="width:100%;" onclick="addTrial('P')">P（プロンプト）</button>
+            </div>
           </div>
+
           <div style="margin-top:8px;">
             <label>今回セッションの並び</label>
             <div id="trialList" class="trial-list trial-list-empty">まだ入力はありません。</div>
           </div>
+
           <div class="kpi-row">
             <div class="kpi-card">
               <div class="kpi-label">現在の成功率</div>
@@ -1113,160 +635,144 @@
               <div class="kpi-sub">目標回数に対する進み具合</div>
             </div>
           </div>
+
           <label style="margin-top:10px;">メモ（任意）</label>
           <textarea id="sessionNote" placeholder="例：今日は集中しやすく、プロンプトを減らしても成功が維持できた　など"></textarea>
-          <button class="btn btn-save" onclick="saveSession()">このDTT記録を保存</button>
+
+          <button class="btn btn-save" onclick="saveSession()">このABA（DTT）記録を保存</button>
         </div>
       </section>
+
       <!-- 生徒情報・設定 -->
-<section id="view-master" class="view">
-  <div class="card">
-    <div class="card-title"><span class="emoji">🧩</span>生徒情報・設定</div>
-    <div class="card-description">
-      生徒・講師・課題・ターゲット行動・強化子を登録します。<span class="muted">（現場で迷わないよう、関連するものをまとめて配置しました）</span>
-    </div>
-    <div class="panel panel-wide" style="margin-top:14px;">
-      <div class="panel-hd">
-        <div class="panel-title">🏢 施設・アプリ設定</div>
-        <div class="panel-sub">施設名はヘッダーに表示されます（端末ごとに保存）。アーカイブは復元可能です。</div>
-      </div>
-      <div class="panel-body">
-        <div class="target-grid" style="grid-template-columns: 1fr auto;">
-          <div>
-            <div class="form-label">施設名（表示用）</div>
-            <input class="input" id="facilityNameInput" placeholder="例：ビオトープ / 北大前" />
+      <section id="view-master" class="view">
+        <div class="card">
+          <div class="card-title"><span class="emoji">🧩</span><span>生徒情報・設定</span></div>
+          <div class="card-description">
+            生徒・講師・課題・ターゲット行動・強化子マスタの登録と、データのバックアップ・復元を行います。
           </div>
-          <div class="target-grid-actions" style="align-items:end;">
-            <button class="btn btn-outline" id="btnSaveFacility">保存</button>
-          </div>
-        </div>
-        <div class="btn-row" style="margin-top:10px;">
-          <label class="chk"><input type="checkbox" id="toggleShowArchived"> アーカイブ（非表示データ）も表示する</label>
-        </div>
-        <div class="hint-text">※「×」は削除ではなく<strong>アーカイブ</strong>（復元可能）として扱います。</div>
-      </div>
-    </div>
-    <div class="panel-grid">
-      <!-- Students -->
-      <div class="panel">
-        <div class="panel-hd">
-          <div class="panel-title">👦 生徒</div>
-          <div class="panel-sub">例：Aくん</div>
-        </div>
-        <div class="panel-body">
-          <div class="inline-form">
-            <input class="input" id="newStudentName" placeholder="生徒の追加（例：Aくん）" />
-            <button class="btn btn-primary btn-compact" id="btnAddStudent">登録</button>
-          </div>
-          <div class="panel-list" id="studentList">まだ登録がありません。</div><div class="master-list-hint">※タグをクリックで編集、×で削除</div>
-        </div>
-      </div>
-      <!-- Teachers -->
-      <div class="panel">
-        <div class="panel-hd">
-          <div class="panel-title">🧑‍🏫 講師</div>
-          <div class="panel-sub">例：中安先生</div>
-        </div>
-        <div class="panel-body">
-          <div class="inline-form">
-            <input class="input" id="newTeacherName" placeholder="講師の追加（例：中安先生）" />
-            <button class="btn btn-primary btn-compact" id="btnAddTeacher">登録</button>
-          </div>
-          <div class="panel-list" id="teacherList">まだ登録がありません。</div><div class="master-list-hint">※タグをクリックで編集、×で削除</div>
-        </div>
-      </div>
-      <!-- Tasks -->
-      <div class="panel">
-        <div class="panel-hd">
-          <div class="panel-title">🧩 課題</div>
-          <div class="panel-sub">例：動作模倣</div>
-        </div>
-        <div class="panel-body">
-          <div class="inline-form">
-            <input class="input" id="newTaskName" placeholder="課題の追加（例：動作模倣）" />
-            <button class="btn btn-primary btn-compact" id="btnAddTask">登録</button>
-          </div>
-          <div class="panel-list" id="taskList">まだ登録がありません。</div><div class="master-list-hint">※タグをクリックで編集、×で削除</div>
-        </div>
-      </div>
-      <!-- Reinforcers -->
-      <div class="panel">
-        <div class="panel-hd">
-          <div class="panel-title">🍪 強化子</div>
-          <div class="panel-sub">例：タブレット / 好きなお菓子</div>
-        </div>
-        <div class="panel-body">
-          <div class="inline-form">
-            <input class="input" id="newReinforcerName" placeholder="強化子の追加（例：タブレット / 好きなお菓子）" />
-            <button class="btn btn-primary btn-compact" id="btnAddReinforcer">登録</button>
-          </div>
-          <div class="panel-list" id="reinforcerList">まだ登録がありません。</div><div class="master-list-hint">※タグをクリックで編集、×で削除</div>
-        </div>
-      </div>
-    </div>
-    <div class="divider"></div>
-    <!-- Targets -->
-    <div class="panel panel-wide">
-      <div class="panel-hd">
-        <div class="panel-title">🎯 ターゲット行動（課題に紐づけ）</div>
-        <div class="panel-sub">課題を選んでターゲット行動と指示（SD）を登録します。</div>
-      </div>
-      <div class="panel-body">
-        <div class="target-grid">
-          <div>
-            <div class="form-label">課題</div>
-            <select class="select" id="targetTaskSelect"></select>
-          </div>
-          <div>
-            <div class="form-label">ターゲット行動</div>
-            <input class="input" id="newTargetName" placeholder="例：右手を上に上げる" />
-          </div>
-          <div>
-            <div class="form-label">指示（SD）</div>
-            <input class="input" id="newTargetSD" placeholder="例：「こうして」" />
-          </div>
-          <div class="target-grid-actions">
-            <button class="btn btn-primary" id="btnAddTarget">ターゲット行動を登録</button>
-          </div>
-        </div>
-        <details class="details" open>
-          <summary>登録済みターゲット（課題ごと）</summary>
-          <div class="panel-list" id="targetList">まだ登録がありません。</div><div class="master-list-hint">※タグをクリックで編集、×で削除（課題との紐づけも更新されます）</div>
-        </details>
-        <details class="details">
-          <summary>標的行動の指示（SD）を編集</summary>
-          <div class="edit-sd">
-            <div class="form-label">標的行動</div>
-            <select class="select" id="editTargetSelect"></select>
-            <div class="form-label">指示（SD）</div>
-            <input class="input" id="editTargetSD" placeholder="例：「こうして」" />
-            <div class="btn-row" style="margin-top:10px;">
-              <button class="btn btn-outline" id="btnSaveTargetSD">保存</button>
+
+          <div class="row">
+            <div>
+              <label>生徒の追加</label>
+              <div class="row">
+                <div style="flex:2;">
+                  <input id="newStudentName" placeholder="例：Aくん">
+                </div>
+                <div style="flex:1;display:flex;align-items:center;">
+                  <button class="btn btn-outline" style="width:100%;" onclick="addStudent()">登録</button>
+                </div>
+              </div>
+              <label style="margin-top:8px;">登録済みの生徒</label>
+              <div id="studentList" class="note-text">まだ登録がありません。</div>
             </div>
-            <div class="hint-text">空欄で保存すると、SDは未設定になります。</div>
+
+            <div>
+              <label>講師の追加</label>
+              <div class="row">
+                <div style="flex:2;">
+                  <input id="newTeacherName" placeholder="例：中安先生">
+                </div>
+                <div style="flex:1;display:flex;align-items:center;">
+                  <button class="btn btn-outline" style="width:100%;" onclick="addTeacher()">登録</button>
+                </div>
+              </div>
+              <label style="margin-top:8px;">登録済みの講師</label>
+              <div id="teacherList" class="note-text">まだ登録がありません。</div>
+            </div>
           </div>
-        </details>
-      </div>
-    </div>
-    <div class="divider"></div>
-    <!-- Backup -->
-    <div class="panel panel-wide">
-      <div class="panel-hd">
-        <div class="panel-title">💾 データのバックアップ / 復元</div>
-        <div class="panel-sub">別端末へ移す、万が一に備えるときに使います。</div>
-      </div>
-      <div class="panel-body">
-        <div class="btn-row">
-          <button class="btn btn-outline" id="btnBackup">バックアップをダウンロード</button>
-          <label class="btn btn-outline" for="restoreFile" style="cursor:pointer;">バックアップから復元</label>
-          <input type="file" id="backupFileInput" accept=".json" onchange="importBackup(event)" style="display:none;">
-          <button class="btn btn-outline" id="btnResetAll">すべて初期化</button>
+
+          <div class="row">
+            <div>
+              <label>課題の追加</label>
+              <div class="row">
+                <div style="flex:2;">
+                  <input id="newTaskName" placeholder="例：動作模倣">
+                </div>
+                <div style="flex:1;display:flex;align-items:center;">
+                  <button class="btn btn-outline" style="width:100%;" onclick="addTask()">登録</button>
+                </div>
+              </div>
+              <label style="margin-top:8px;">登録済みの課題</label>
+              <div id="taskList" class="note-text">まだ登録がありません。</div>
+            </div>
+
+            <div>
+              <label>ターゲット行動の追加</label>
+              <div class="row">
+                <div>
+                  <label style="font-size:11px;">課題</label>
+                  <select id="targetTaskSelect" onchange="onTargetTaskChange()">
+                    <option value="">課題を選択</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="font-size:11px;">ターゲット行動</label>
+                  <input id="newTargetName" placeholder="例：右手を上に上げる">
+              <input id="newTargetSD" class="input" placeholder="指示（SD） 例：「こうして」" style="margin-top:8px;">
+                </div>
+              </div>
+              <div style="margin-top:6px;">
+                <button class="btn btn-outline" onclick="addTarget()">ターゲット行動を登録</button>
+              </div>
+              <label style="margin-top:8px;">選択中の課題に紐づくターゲット行動</label>
+              <div id="targetList" class="note-text">課題を選ぶと一覧が表示されます。</div>
+            <div class="divider"></div>
+            <div class="note-text" style="font-weight:700;margin-bottom:6px;">標的行動の指示（SD）を編集</div>
+            <div class="form-grid">
+              <div class="form-field">
+                <label class="form-label">標的行動</label>
+                <select id="editTargetSelect" class="select"></select>
+                <div class="hint-text">既に登録済みの標的行動の「指示（SD）」を後から変更できます。</div>
+              </div>
+              <div class="form-field">
+                <label class="form-label">指示（SD）</label>
+                <input id="editTargetSD" class="input" placeholder="例：「こうして」">
+                <div class="hint-text">空欄で保存すると、SDは未設定になります。</div>
+              </div>
+            </div>
+            <div class="btn-row" style="margin-top:10px;">
+              <button class="btn" id="btnSaveTargetSD">保存</button>
+            </div>
+        
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>強化子マスタの追加</label>
+              <div class="row">
+                <div style="flex:2;">
+                  <input id="newReinforcerName" placeholder="例：タブレット / 好きなお菓子">
+                </div>
+                <div style="flex:1;display:flex;align-items:center;">
+                  <button class="btn btn-outline" style="width:100%;" onclick="addReinforcer()">登録</button>
+                </div>
+              </div>
+              <label style="margin-top:8px;">登録済みの強化子</label>
+              <div id="reinforcerList" class="note-text">まだ登録がありません。</div>
+              <div class="note-text">
+                ※ ランキング（1〜5位）は「ABA（DTT）記録」画面で各セッションごとに設定します。
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>データのバックアップ / 復元</label>
+              <div class="backup-row">
+                <button class="btn btn-outline" onclick="exportBackup()">バックアップをダウンロード</button>
+                <input type="file" id="backupFileInput" accept=".json" onchange="importBackup(event)">
+              </div>
+              <div class="note-text">
+                ・バックアップはJSON形式で保存されます。<br>
+                ・PC入れ替え時などに復元できます。
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="hint-text">※復元すると、現在のデータは上書きされます。</div>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
+
+      
       <!-- 生徒リスト -->
       <section id="view-students" class="view">
         <div class="card">
@@ -1275,37 +781,48 @@
             生徒ごとの基本情報（学年・メモ・タグなど）をまとめて管理します。<br>
             ※ 記録データとは別に保存されます（ブラウザ内）。
           </div>
+
           <div class="form-grid" style="margin-top:10px;">
             <div class="form-field">
               <label class="form-label">生徒</label>
               <select id="profileStudentSelect" class="select"></select>
               <div class="hint-text">「生徒情報・設定」で登録した生徒が表示されます。</div>
             </div>
+
             <div class="form-field">
               <label class="form-label">学年</label>
               <input id="profileGrade" class="input" placeholder="例：小4 / 中1 / 高2 / 大人など">
             </div>
+
             <div class="form-field">
               <label class="form-label">タグ（カンマ区切り）</label>
               <input id="profileTags" class="input" placeholder="例：視覚優位, 音に敏感, ルーティン">
             </div>
+
             <div class="form-field">
               <label class="form-label">メモ</label>
               <textarea id="profileNote" class="textarea" rows="5" placeholder="特性・注意点・好きな強化子・配慮など"></textarea>
             </div>
           </div>
+
           <div class="btn-row" style="margin-top:12px;">
             <button class="btn" id="btnSaveProfile">保存</button>
             <button class="btn btn-outline" id="btnClearProfile">クリア</button>
           </div>
+
           <div class="divider"></div>
+
           <div class="note-text" style="font-weight:600;margin-bottom:6px;">登録状況</div>
           <div id="profileSummary" class="note-text">生徒を選択すると表示されます。</div>
+
           <div class="divider"></div>
+
           <div class="note-text" style="font-weight:600;margin-bottom:6px;">生徒一覧（クリックで編集）</div>
           <div id="profileCardList" class="profile-card-list"></div>
         </div>
       </section>
+
+
 <!-- 記録一覧・グラフ -->
       <section id="view-logs" class="view">
         <div class="row" style="margin-bottom:8px;align-items:flex-end;">
@@ -1328,17 +845,16 @@
             </select>
           </div>
         </div>
+
         <div class="card">
           <div class="card-title"><span class="emoji">👤</span><span>生徒ミニダッシュボード</span></div>
-    <div class="btn-row" style="margin-top:10px;">
-      <button class="btn btn-outline" id="btnExportCSV">CSV出力</button>
-    </div>
           <div class="card-description">
             選択中の生徒について、最近の状況と課題・ターゲットごとの簡易まとめを表示します。
           </div>
           <div id="studentMiniSummary" class="note-text">生徒フィルタで1名を選択すると、ここに概要が表示されます。</div>
           <table class="mini-dashboard-table" id="studentMiniTable"></table>
         </div>
+
         <div class="card">
           <div class="card-title"><span class="emoji">📋</span><span>記録一覧</span></div>
           <div class="card-description">
@@ -1350,6 +866,7 @@
           </div>
           <div id="sessionList"></div>
         </div>
+
         <div class="card">
           <div class="card-title">
             <span class="emoji">📈</span><span>成功率の推移グラフ</span>
@@ -1362,6 +879,7 @@
           </div>
           <canvas id="sessionChart" height="220" style="margin-top:8px;"></canvas>
         </div>
+
         <div class="card">
           <div class="card-title"><span class="emoji">🤖</span><span>簡易分析（どの回でミスが多いか）</span></div>
           <div class="card-description">
@@ -1376,1465 +894,74 @@
     </div>
   </main>
 </div>
+
+  
+  <!-- PATCH: プロンプト種類 UI/表示を隠す（要素自体は残す＝app.jsが落ちない） -->
   <script>
-/* DTT記録ツール（フルパックデザイン復元・安定版）
-   - index_aba_fullpack.html の見た目をそのまま使う
-   - JSだけを“壊れない構造”に差し替え
-*/
-(function(){
-  "use strict";
-  // Storage keys (旧版と同じ)
-  const STORAGE_KEY_SESSIONS   = "ABA_SCHPASS_SESSIONS_V6";
-  const STORAGE_KEY_STUDENTS   = "ABA_SCHPASS_STUDENTS_V6";
-  const STORAGE_KEY_TEACHERS   = "ABA_SCHPASS_TEACHERS_V6";
-  const STORAGE_KEY_TASKS      = "ABA_SCHPASS_TASKS_V6";
-  const STORAGE_KEY_TARGETS    = "ABA_SCHPASS_TARGETS_V6";
-  const STORAGE_KEY_TARGET_SD   = "ABA_SCHPASS_TARGET_SD_V1";
-  const STORAGE_KEY_TASK_TARGETS = "ABA_SCHPASS_TASK_TARGETS_V1";
-  const STORAGE_KEY_REINFORCERS= "ABA_SCHPASS_REINFORCERS_V6";
-  const VERSION = "design-restore-stable-v1";
-  let sessions = [];
-  let appSettings = { facilityName: "" , showArchived: false };
-  let archiveStore = { students: [], teachers: [], tasks: [], targets: [], reinforcers: [] };
-  let students = [];
-  let teachers = [];
-  let tasks = [];
-  let targets = [];
-  let reinforcers = [];
-  let targetSdMap = {}; // { [targetName]: sdText }
-  let taskTargetsMap = {}; // { [taskName]: [targetName, ...] }
-  let currentTrials = [];
-  function $(id){ return document.getElementById(id); }
-  function safeGet(key, fallback){
-    try{
-      const v = localStorage.getItem(key);
-      if(v === null || v === undefined) return fallback;
-      const parsed = JSON.parse(v);
-      return parsed ?? fallback;
-    }
-  // --- Legacy data migration (v11) ---
-  function migrateLegacyData(){
-    // If current V6 keys are empty, try to load from older keys (V1-V5) and promote to V6.
-    const fallbacks = {
-      tasks: ["ABA_SCHPASS_TASKS_V5","ABA_SCHPASS_TASKS_V4","ABA_SCHPASS_TASKS_V3","ABA_SCHPASS_TASKS_V2","ABA_SCHPASS_TASKS_V1","ABA_SCHPASS_TASKS"],
-      targets: ["ABA_SCHPASS_TARGETS_V5","ABA_SCHPASS_TARGETS_V4","ABA_SCHPASS_TARGETS_V3","ABA_SCHPASS_TARGETS_V2","ABA_SCHPASS_TARGETS_V1","ABA_SCHPASS_TARGETS"],
-      students: ["ABA_SCHPASS_STUDENTS_V5","ABA_SCHPASS_STUDENTS_V4","ABA_SCHPASS_STUDENTS_V3","ABA_SCHPASS_STUDENTS_V2","ABA_SCHPASS_STUDENTS_V1","ABA_SCHPASS_STUDENTS"],
-      teachers: ["ABA_SCHPASS_TEACHERS_V5","ABA_SCHPASS_TEACHERS_V4","ABA_SCHPASS_TEACHERS_V3","ABA_SCHPASS_TEACHERS_V2","ABA_SCHPASS_TEACHERS_V1","ABA_SCHPASS_TEACHERS"],
-      reinforcers: ["ABA_SCHPASS_REINFORCERS_V5","ABA_SCHPASS_REINFORCERS_V4","ABA_SCHPASS_REINFORCERS_V3","ABA_SCHPASS_REINFORCERS_V2","ABA_SCHPASS_REINFORCERS_V1","ABA_SCHPASS_REINFORCERS"],
-      sessions: ["ABA_SCHPASS_SESSIONS_V5","ABA_SCHPASS_SESSIONS_V4","ABA_SCHPASS_SESSIONS_V3","ABA_SCHPASS_SESSIONS_V2","ABA_SCHPASS_SESSIONS_V1","ABA_SCHPASS_SESSIONS"]
-    };
-    function pickFirstArray(keys){
-      for(const k of keys){
-        const v = safeGet(k, null);
-        if(Array.isArray(v) && v.length) return v;
-      }
-      return null;
-    }
-    let changed = false;
-    if(Array.isArray(tasks) && tasks.length === 0){
-      const v = pickFirstArray(fallbacks.tasks);
-      if(v){ tasks = v; changed = true; }
-    }
-    if(Array.isArray(targets) && targets.length === 0){
-      const v = pickFirstArray(fallbacks.targets);
-      if(v){ targets = v; changed = true; }
-    }
-    if(Array.isArray(students) && students.length === 0){
-      const v = pickFirstArray(fallbacks.students);
-      if(v){ students = v; changed = true; }
-    }
-    if(Array.isArray(teachers) && teachers.length === 0){
-      const v = pickFirstArray(fallbacks.teachers);
-      if(v){ teachers = v; changed = true; }
-    }
-    if(Array.isArray(reinforcers) && reinforcers.length === 0){
-      const v = pickFirstArray(fallbacks.reinforcers);
-      if(v){ reinforcers = v; changed = true; }
-    }
-    if(Array.isArray(sessions) && sessions.length === 0){
-      const v = pickFirstArray(fallbacks.sessions);
-      if(v){ sessions = v; changed = true; }
-    }
-    if(changed){
-      // normalize to string arrays (defensive)
-      tasks = (tasks||[]).map(x=>String(x)).filter(x=>x.trim().length>0);
-      targets = (targets||[]).map(x=>String(x)).filter(x=>x.trim().length>0);
-      students = (students||[]).map(x=>String(x)).filter(x=>x.trim().length>0);
-      teachers = (teachers||[]).map(x=>String(x)).filter(x=>x.trim().length>0);
-      reinforcers = (reinforcers||[]).map(x=>String(x)).filter(x=>x.trim().length>0);
-      saveAll(); // promote to current keys
-    }
-  }
-catch(_){ return fallback; }
-  }
-  function safeSet(key, value){
-    try{
-      localStorage.setItem(key, JSON.stringify(value));
-      return true;
-    }catch(e){
-      alert("保存できません（容量不足/プライベートモード等の可能性）");
-      return false;
-    }
-  }
-  function loadAll(){
-    sessions    = safeGet(STORAGE_KEY_SESSIONS, []);
-    students    = safeGet(STORAGE_KEY_STUDENTS, []);
-    teachers    = safeGet(STORAGE_KEY_TEACHERS, []);
-    tasks       = safeGet(STORAGE_KEY_TASKS, []);
-    targets     = safeGet(STORAGE_KEY_TARGETS, []);
-    reinforcers = safeGet(STORAGE_KEY_REINFORCERS, []);
-    appSettings = safeGet(STORAGE_KEY_APP_SETTINGS, { facilityName:"", showArchived:false });
-    archiveStore = safeGet(STORAGE_KEY_ARCHIVE, { students:[], teachers:[], tasks:[], targets:[], reinforcers:[] });
-    targetSdMap  = safeGet(STORAGE_KEY_TARGET_SD, {});
-    taskTargetsMap = safeGet(STORAGE_KEY_TASK_TARGETS, {});
-    if(!taskTargetsMap || typeof taskTargetsMap !== 'object' || Array.isArray(taskTargetsMap)) taskTargetsMap = {};
-    if(!targetSdMap || typeof targetSdMap !== 'object' || Array.isArray(targetSdMap)) targetSdMap = {};
-    if(!Array.isArray(sessions)) sessions = [];
-    if(!Array.isArray(students)) students = [];
-    if(!Array.isArray(teachers)) teachers = [];
-    if(!Array.isArray(tasks)) tasks = [];
-    // migrate from older keys if needed
-    migrateLegacyData();
-    if(!Array.isArray(targets)) targets = [];
-    if(!Array.isArray(reinforcers)) reinforcers = [];
-  }
-  function saveAll(){
-    return (
-      safeSet(STORAGE_KEY_SESSIONS, sessions) &&
-      safeSet(STORAGE_KEY_STUDENTS, students) &&
-      safeSet(STORAGE_KEY_TEACHERS, teachers) &&
-      safeSet(STORAGE_KEY_TASKS, tasks) &&
-      safeSet(STORAGE_KEY_TARGETS, targets) &&
-      safeSet(STORAGE_KEY_REINFORCERS, reinforcers) &&
-      safeSet(STORAGE_KEY_TARGET_SD, targetSdMap) &&
-      safeSet(STORAGE_KEY_TASK_TARGETS, taskTargetsMap)
-    );
-  }
-  function renameInArray(arr, oldV, newV){
-    const i = arr.indexOf(oldV);
-    if(i === -1) return false;
-    if(arr.includes(newV)) return false;
-    arr[i] = newV;
-    return true;
-  }
-  function confirmDanger(msg){
-    return confirm(msg);
-  }
-  function sanitizeName(s){
-    return String(s||"").trim().replace(/\s+/g, " ");
-  }
-  function isArchived(kind, name){
-    const arr = archiveStore?.[kind] || [];
-    return arr.includes(name);
-  }
-  function archiveAdd(kind, name){
-    archiveStore[kind] = Array.from(new Set([...(archiveStore[kind]||[]), name]));
-  }
-  function archiveRemove(kind, name){
-    archiveStore[kind] = (archiveStore[kind]||[]).filter(x=>x!==name);
-  }
-  function showErrors(list){
-    const box = document.getElementById("sessionErrors");
-    if(!box) return;
-    if(!list || !list.length){
-      box.style.display = "none";
-      box.innerHTML = "";
-      return;
-    }
-  function toast(title, sub="", type="success", ms=2200){
-    const host = document.getElementById("toastHost");
-    if(!host) return;
-    const el = document.createElement("div");
-    el.className = `toast ${type}`;
-    el.innerHTML = `<div>
-        <div class="t-title">${escapeHtml(title)}</div>
-        ${sub ? `<div class="t-sub">${escapeHtml(sub)}</div>` : ""}
-      </div>`;
-    host.appendChild(el);
-    requestAnimationFrame(()=> el.classList.add("show"));
-    setTimeout(()=>{
-      el.classList.remove("show");
-      setTimeout(()=> el.remove(), 220);
-    }, ms);
-  }
-    box.style.display = "block";
-    box.innerHTML = `<ul>${list.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>`;
-  }
-  function setInvalid(el, on){
-    if(!el) return;
-    el.classList.toggle("is-invalid", !!on);
-  }
-function uniqPush(arr, v){
-    if(!v) return false;
-    if(arr.includes(v)) return false;
-    arr.push(v);
-    return true;
-  }
-  function makeTargetTag(label, sd){
-    const base = makeEditableTag(label);
-    if(!sd) return base;
-    // insert SD badge before closing tag span
-    return base.replace('</span>', ` <span class="muted">（SD:${escapeHtml(sd)}）</span></span>`);
-  }
-  function makeEditableTag(label, onEdit, onDelete){
-    const safe = escapeHtml(label);
-    return `<span class="tag editable" data-label="${safe}">
-      <span class="t">${safe}</span>
-      <span class="x" role="button" title="削除" aria-label="削除">×</span>
-    </span>`;
-  }
-  function escapeHtml(s){
-    return String(s)
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
-  function getTargetSd(targetName){
-    if(!targetName) return "";
-    return (targetSdMap[targetName] || "").trim();
-  }
-  function setTargetSd(targetName, sd){
-    if(!targetName) return;
-    const v = String(sd||"").trim();
-    if(v) targetSdMap[targetName] = v;
-    else delete targetSdMap[targetName];
-  }
-  function loadEditTargetSd(){
-    const sel = $("editTargetSelect");
-    if(!sel) return;
-    const name = sel.value || "";
-    const sd = getTargetSd(name);
-    const input = $("editTargetSD");
-    if(input) input.value = sd;
-  }
-  function saveEditTargetSd(){
-    const sel = $("editTargetSelect");
-    if(!sel) return;
-    const name = sel.value || "";
-    if(!name) return alert("標的行動を選択してください。");
-    const sd = ($("editTargetSD")?.value || "").trim();
-    setTargetSd(name, sd);
-    if(!saveAll()) return;
-    renderAllViews();
-    updateTargetSdPreview();
-    loadEditTargetSd();
-    alert("指示（SD）を保存しました。※過去の記録に保存されたSDはそのままです。");
-  }
-  function updateTargetSdPreview(){
-    const target = $("targetSelect")?.value || "";
-    const targetSd = getTargetSd(target);
-    const sd = getTargetSd(target);
-    const text = $("targetSdText");
-    if(text) text.textContent = sd ? sd : "-";
-  }
-  function getTargetsForTask(taskName){
-    if(!taskName) return targets.slice();
-    const list = taskTargetsMap[taskName];
-    if(Array.isArray(list) && list.length){
-      // keep only existing targets, preserve order
-      const set = new Set(targets);
-      return list.filter(t=>set.has(t));
-    }
-    // fallback: show all
-    return targets.slice();
-  }
-  function addTargetToTask(taskName, targetName){
-    if(!taskName || !targetName) return;
-    if(!taskTargetsMap[taskName] || !Array.isArray(taskTargetsMap[taskName])) taskTargetsMap[taskName] = [];
-    if(!taskTargetsMap[taskName].includes(targetName)) taskTargetsMap[taskName].push(targetName);
-  }
-  // Called by select onchange (avoid console errors)
-  function onTargetTaskChange(){ /* no-op for now */ }
-  function editStudent(oldName){
-    const next = sanitizeName(prompt("生徒名を編集", oldName) || "");
-    if(!next || next === oldName) return;
-    if(students.includes(next)) return alert("同じ名前が既にあります。");
-    if(!renameInArray(students, oldName, next)) return;
-    // sessions keep text; update for display consistency
-    sessions.forEach(s=>{ if(s.student === oldName) s.student = next; });
-    saveAll();
-    renderAll();
-    validateSession();
-    showErrors([]);
-    validateSession();
-  }
-  function deleteStudent(name){
-    const used = sessions.some(s=>s.student === name);
-    const msg = used
-      ? `「${name}」は既に記録に使用されています。\n削除すると、今後の選択肢から消えます（過去記録の文字は残ります）。\nアーカイブ（非表示）にしますか？`
-      : `「${name}」をアーカイブ（非表示）にしますか？`;
-    if(!confirmDanger(msg)) return;
-    archiveAdd("students", name);
-    students = students.filter(x=>x!==name);
-    saveAll();
-    renderAll();
-    validateSession();
-  }
-  function editTeacher(oldName){
-    const next = sanitizeName(prompt("講師名を編集", oldName) || "");
-    if(!next || next === oldName) return;
-    if(teachers.includes(next)) return alert("同じ名前が既にあります。");
-    if(!renameInArray(teachers, oldName, next)) return;
-    sessions.forEach(s=>{ if(s.teacher === oldName) s.teacher = next; });
-    saveAll();
-    renderAll();
-  }
-  function deleteTeacher(name){
-    const used = sessions.some(s=>s.teacher === name);
-    const msg = used
-      ? `「${name}」は既に記録に使用されています。\n削除すると、今後の選択肢から消えます（過去記録の文字は残ります）。\nアーカイブ（非表示）にしますか？`
-      : `「${name}」をアーカイブ（非表示）にしますか？`;
-    if(!confirmDanger(msg)) return;
-    archiveAdd("teachers", name);
-    teachers = teachers.filter(x=>x!==name);
-    saveAll();
-    renderAll();
-  }
-  function editTask(oldName){
-    const next = sanitizeName(prompt("課題名を編集", oldName) || "");
-    if(!next || next === oldName) return;
-    if(tasks.includes(next)) return alert("同じ名前が既にあります。");
-    if(!renameInArray(tasks, oldName, next)) return;
-    // migrate taskTargetsMap key
-    if(taskTargetsMap[oldName]){
-      taskTargetsMap[next] = taskTargetsMap[oldName];
-      delete taskTargetsMap[oldName];
-    }
-    // sessions update
-    sessions.forEach(s=>{ if(s.task === oldName) s.task = next; });
-    saveAll();
-    renderAll();
-  }
-  function deleteTask(name){
-    const used = sessions.some(s=>s.task === name);
-    const msg = used
-      ? `「${name}」は既に記録に使用されています。\n削除すると、ターゲット紐づけも消え、今後の選択肢から消えます（過去記録の文字は残ります）。\nアーカイブ（非表示）にしますか？`
-      : `「${name}」をアーカイブ（非表示）にしますか？（紐づくターゲットも表示されなくなります）`;
-    if(!confirmDanger(msg)) return;
-    archiveAdd("tasks", name);
-    tasks = tasks.filter(x=>x!==name);
-    delete taskTargetsMap[name];
-    saveAll();
-    renderAll();
-  }
-  function editReinforcer(oldName){
-    const next = sanitizeName(prompt("強化子を編集", oldName) || "");
-    if(!next || next === oldName) return;
-    if(reinforcers.includes(next)) return alert("同じ名前が既にあります。");
-    if(!renameInArray(reinforcers, oldName, next)) return;
-    sessions.forEach(s=>{ if(s.reinforcer === oldName) s.reinforcer = next; });
-    saveAll();
-    renderAll();
-  }
-  function deleteReinforcer(name){
-    const used = sessions.some(s=>s.reinforcer === name);
-    const msg = used
-      ? `「${name}」は既に記録に使用されています。\n削除すると、今後の選択肢から消えます（過去記録の文字は残ります）。\nアーカイブ（非表示）にしますか？`
-      : `「${name}」をアーカイブ（非表示）にしますか？`;
-    if(!confirmDanger(msg)) return;
-    archiveAdd("reinforcers", name);
-    reinforcers = reinforcers.filter(x=>x!==name);
-    saveAll();
-    renderAll();
-  }
-  function editTarget(oldName){
-    const next = sanitizeName(prompt("ターゲット行動を編集", oldName) || "");
-    if(!next || next === oldName) return;
-    if(targets.includes(next)) return alert("同じターゲットが既にあります。");
-    if(!renameInArray(targets, oldName, next)) return;
-    // SD migrate
-    if(targetSdMap[oldName] !== undefined){
-      targetSdMap[next] = targetSdMap[oldName];
-      delete targetSdMap[oldName];
-    }
-    // task mapping migrate
-    Object.keys(taskTargetsMap||{}).forEach(t=>{
-      const arr = taskTargetsMap[t];
-      if(Array.isArray(arr)){
-        taskTargetsMap[t] = arr.map(x=> x===oldName ? next : x);
-      }
-    });
-    // sessions update
-    sessions.forEach(s=>{ if(s.target === oldName) s.target = next; });
-    saveAll();
-    renderAll();
-  }
-  function deleteTarget(name){
-    const used = sessions.some(s=>s.target === name);
-    const msg = used
-      ? `「${name}」は既に記録に使用されています。\n削除すると、課題との紐づけ・SDも消え、今後の選択肢から消えます（過去記録の文字は残ります）。\nアーカイブ（非表示）にしますか？`
-      : `「${name}」をアーカイブ（非表示）にしますか？（課題との紐づけ・SDも削除）`;
-    if(!confirmDanger(msg)) return;
-    archiveAdd("targets", name);
-    targets = targets.filter(x=>x!==name);
-    delete targetSdMap[name];
-    Object.keys(taskTargetsMap||{}).forEach(t=>{
-      const arr = taskTargetsMap[t];
-      if(Array.isArray(arr)){
-        taskTargetsMap[t] = arr.filter(x=>x!==name);
-      }
-    });
-    saveAll();
-    renderAll();
-  }
-function onSessionTaskChange(){
-    const task = $("taskSelect")?.value || "";
-    const current = $("targetSelect")?.value || "";
-    const list = getTargetsForTask(task);
-    fillSelect($("targetSelect"), list, "ターゲット行動を選択");
-    // restore if still available
-    if(current && list.includes(current)) $("targetSelect").value = current;
-    updateTargetSdPreview();
-  }
-  function bindClick(selector, handler){
-    document.querySelectorAll(selector).forEach(el=>{
-      el.addEventListener("click", (e)=>{ e.preventDefault(); handler(e, el); });
-    });
-  }
-function calcStats(marks){
-    const t = Array.isArray(marks) ? marks : [];
-    const plus  = t.filter(x=>x==="+").length;
-    const minus = t.filter(x=>x==="-").length;
-    const p     = t.filter(x=>x==="P").length;
-    const total = plus + minus + p;
-    const rate  = total ? Math.round((plus/total)*100) : 0;
-    return {plus, minus, p, total, rate};
-  }
-  // --- View switching (旧HTMLのonclickに合わせる) ---
-  function switchView(viewId){
-    document.querySelectorAll(".view").forEach(v=>{
-      v.classList.toggle("view-active", v.id === viewId);
-    });
-    document.querySelectorAll(".menu-item").forEach(btn=>{
-      const isActive = btn.getAttribute("onclick")?.includes(`'${viewId}'`) || btn.getAttribute("data-view") === viewId;
-      btn.classList.toggle("active", !!isActive);
-    });
-    // ページタイトル（存在すれば更新）
-    const map = {
-      "view-home":"ホーム",
-      "view-session":"DTT記録",
-      "view-master":"生徒情報・設定",
-      "view-logs":"記録一覧・グラフ"
-    };
-    const titleEl = $("currentViewTitle");
-    if(titleEl) titleEl.textContent = map[viewId] || "DTT記録ツール";
-    if(viewId === "view-logs"){
-      // サイズ確定後に描画
-      setTimeout(()=>{ renderChart(); }, 50);
-    }
-  }
-  // --- Select fill ---
-  function fillSelect(id, items, placeholder="選択してください"){
-    const el = $(id);
-    if(!el) return;
-    const v = el.value;
-    const kindById = {
-      childSelect: "students",
-      teacherSelect: "teachers",
-      taskSelect: "tasks",
-      targetSelect: "targets",
-      targetTaskSelect: "tasks",
-      editTargetSelect: "targets",
-      reinforcer1: "reinforcers",
-      reinforcer2: "reinforcers",
-      reinforcer3: "reinforcers",
-      reinforcer4: "reinforcers",
-      reinforcer5: "reinforcers"
-    };
-    const kind = kindById[id];
-    let list = (items || []).slice();
-    if(kind && !(appSettings?.showArchived)){
-      const arch = new Set(archiveStore?.[kind] || []);
-      list = list.filter(x => !arch.has(x));
-    }
-    el.innerHTML = "";
-    const opt0 = document.createElement("option");
-    opt0.value = "";
-    opt0.textContent = placeholder;
-    el.appendChild(opt0);
-    list.forEach(s=>{
-      const opt = document.createElement("option");
-      opt.value = s;
-      opt.textContent = s;
-      el.appendChild(opt);
-    });
-    // restore selection if possible
-    if(v && list.includes(v)) el.value = v;
-  });
-    // keep selection if still exists
-    if(items.includes(value)) sel.value = value;
-  }
-  function refreshAllSelects(){
-    fillSelect($("childSelect"), students, "生徒を選択");
-    fillSelect($("profileStudentSelect"), students, "生徒を選択");
-    fillSelect($("teacherSelect"), teachers, "講師を選択");
-    fillSelect($("taskSelect"), tasks, "課題を選択");
-    fillSelect($("targetTaskSelect"), tasks, "課題を選択");
-    fillSelect($("targetSelect"), targets, "ターゲット行動を選択");
-    fillSelect($("editTargetSelect"), targets, "標的行動を選択");
-    updateTargetSdPreview();
-    // filters
-    fillSelect($("graphStudentFilter"), students, "すべての生徒");
-    fillSelect($("logTaskFilter"), tasks, "すべての課題");
-    fillSelect($("logTargetFilter"), targets, "すべてのターゲット");
-    // reinforcer ranking selects
-    ["reinforcer1","reinforcer2","reinforcer3","reinforcer4","reinforcer5"].forEach(id=>{
-      fillSelect($(id), reinforcers, "未指定");
-    });
-  }
-  // --- Trial input ---
-  function updateTrialUI(){
-    const goal = clampInt($("trialGoal")?.value, 10, 1, 30);
-    if($("trialGoal")) $("trialGoal").value = String(goal);
-    const st = calcStats(currentTrials);
-    // list display in original HTML
-    const listEl = $("trialList");
-    if(listEl){
-      if(st.total === 0){
-        listEl.textContent = "まだ入力はありません。";
-        listEl.classList.add("trial-list-empty");
-      }else{
-        listEl.classList.remove("trial-list-empty");
-        listEl.textContent = currentTrials.join("");
-      }
-    }
-    if($("kpiRate")) $("kpiRate").textContent = `${st.rate}%`;
-    if($("kpiDetail")) $("kpiDetail").textContent = `成功 ${st.plus} 回 / ${st.total} 回中（失敗 ${st.minus} / P ${st.p}）`;
-    if($("kpiCount")) $("kpiCount").textContent = `${st.total} / ${goal}`;
-    if($("kpiProgress")){
-      const pct = Math.min(100, Math.round((st.total/goal)*100));
-      $("kpiProgress").style.width = pct + "%";
-    }
-  }
-  function updateBigCounters(){
-    const plus = currentTrials.filter(x=>x==="+").length;
-    const minus = currentTrials.filter(x=>x==="-").length;
-    const p = currentTrials.filter(x=>x==="P").length;
-    const total = plus + minus + p;
-    const rate = (plus + minus) > 0 ? Math.round((plus / (plus + minus)) * 100) : 0;
-    const elp = document.getElementById("countPlusBig");
-    const elm = document.getElementById("countMinusBig");
-    const elp2 = document.getElementById("countPBig");
-    const elr = document.getElementById("rateBig");
-    if(elp) elp.textContent = String(plus);
-    if(elm) elm.textContent = String(minus);
-    if(elp2) elp2.textContent = String(p);
-    if(elr) elr.textContent = String(rate);
-  }
-  function undoTrial(){
-    if(currentTrials.length === 0) return;
-    currentTrials.pop();
-    updateTrialUI();
-    updateBigCounters();
-      validateSession();
-    validateSession();
-    validateSession();
-  }
-  function resetTrial(){
-    if(!confirm("試行（＋/－/P）をリセットしますか？")) return;
-    currentTrials = [];
-    updateTrialUI();
-    updateBigCounters();
-    validateSession();
-    updateBigCounters();
-  }
-  function clampInt(v, def, min, max){
-    const n = parseInt(String(v ?? ""), 10);
-    if(Number.isFinite(n)){
-      return Math.max(min, Math.min(max, n));
-    }
-    return def;
-  }
-  function addTrial(mark){
-    currentTrials.push(mark);
-    updateTrialUI();
-    updateBigCounters();
-  }
-  // --- Master lists UI ---
-  function renderArchivedSection(kind, containerId){
-    if(!appSettings?.showArchived) return;
-    const arr = archiveStore?.[kind] || [];
-    if(!arr.length) return;
-    const el = document.getElementById(containerId);
-    if(!el) return;
-    const wrap = document.createElement("div");
-    wrap.className = "archived-wrap";
-    wrap.style.marginTop = "10px";
-    wrap.innerHTML = `<div class="hint-text" style="margin:6px 0 8px; font-weight:900;">アーカイブ（復元可能）</div>
-      <div class="panel-list" data-archived="${kind}">
-        ${arr.map(s=>`<span class="tag editable" data-arch="1"><span class="t">${escapeHtml(s)}</span><span class="x" role="button" title="復元" aria-label="復元">↩</span></span>`).join("")}
-      </div>`;
-    el.parentElement?.appendChild(wrap);
-  }
-function renderMasterLists(){
-    $("studentList") && ( $("studentList").innerHTML = students.length ? students.map(s=>`${makeEditableTag(s)}`).join("") : "まだ登録がありません。" );
-    renderArchivedSection("students", "studentList");
-    $("teacherList") && ( $("teacherList").innerHTML = teachers.length ? teachers.map(s=>`${makeEditableTag(s)}`).join("") : "まだ登録がありません。" );
-    renderArchivedSection("teachers", "teacherList");
-    $("taskList") && ( $("taskList").innerHTML = tasks.length ? tasks.map(s=>`${makeEditableTag(s)}`).join("") : "まだ登録がありません。" );
-    renderArchivedSection("tasks", "taskList");
-    $("targetList") && ( $("targetList").innerHTML = targets.length ? targets.map(s=>`${makeEditableTag(s)}`).join("") : "まだ登録がありません。" );
-    renderArchivedSection("targets", "targetList");
-    $("reinforcerList") && ( $("reinforcerList").innerHTML = reinforcers.length ? reinforcers.map(s=>`${makeEditableTag(s)}`).join("") : "まだ登録がありません。" );
-    renderArchivedSection("reinforcers", "reinforcerList");
-  }
-  function addStudent(){
-    const v = sanitizeName(($("newStudentName")?.value || ""));
-    if(!v) return alert("生徒名を入力してください。");
-    if(!uniqPush(students, v)) return alert("既に登録済みです。");
-    $("newStudentName").value = "";
-    if(!saveAll()) return;
-    refreshAllSelects();
-    renderAllViews();
-    renderProfileCards();
-    updateHome();
-  }
-  function addTeacher(){
-    const v = sanitizeName(($("newTeacherName")?.value || ""));
-    if(!v) return alert("講師名を入力してください。");
-    if(!uniqPush(teachers, v)) return alert("既に登録済みです。");
-    $("newTeacherName").value = "";
-    if(!saveAll()) return;
-    refreshAllSelects();
-    renderAllViews();
-  }
-  function addTask(){
-    const v = sanitizeName(($("newTaskName")?.value || ""));
-    if(!v) return alert("課題名を入力してください。");
-    if(!uniqPush(tasks, v)) return alert("既に登録済みです。");
-    $("newTaskName").value = "";
-    if(!saveAll()) return;
-    refreshAllSelects();
-    renderAllViews();
-  }
-  function addTarget(){
-    const v = sanitizeName(($("newTargetName")?.value || ""));
-    const sd = sanitizeName(($("newTargetSD")?.value || ""));
-    const task = ($("targetTaskSelect")?.value || "").trim();
-    if(!v) return alert("ターゲット名を入力してください。");
-    if(!task) return alert("課題を選択してください。");
-    if(!uniqPush(targets, v)) return alert("既に登録済みです。");
-    addTargetToTask(task, v);
-    setTargetSd(v, sd);
-    $("newTargetName").value = "";
-    if($("newTargetSD")) $("newTargetSD").value = "";
-    if(!saveAll()) return;
-    refreshAllSelects();
-    renderAllViews();
-  }
-  function addReinforcer(){
-    const v = sanitizeName(($("newReinforcerName")?.value || ""));
-    if(!v) return alert("強化子を入力してください。");
-    if(!uniqPush(reinforcers, v)) return alert("既に登録済みです。");
-    $("newReinforcerName").value = "";
-    if(!saveAll()) return;
-    refreshAllSelects();
-    renderAllViews();
-  }
-  // --- Save session ---
-  function validateSession(){
-    const errs = [];
-    const elChild = $("childSelect");
-    const elTeacher = $("teacherSelect");
-    const elTask = $("taskSelect");
-    const elTarget = $("targetSelect");
-    const child = (elChild?.value || "").trim();
-    const teacher = (elTeacher?.value || "").trim();
-    const task = (elTask?.value || "").trim();
-    const target = (elTarget?.value || "").trim();
-    if(!child) errs.push("生徒を選択してください。");
-    if(!teacher) errs.push("講師を選択してください。");
-    if(!task) errs.push("課題を選択してください。");
-    const targetOptions = getTargetsForTask(task);
-    const noTargets = task && (!targetOptions || targetOptions.length === 0);
-    const hint = document.getElementById("noTargetsHint");
-    if(hint) hint.style.display = noTargets ? "block" : "none";
-    if(noTargets) errs.push("この課題にはターゲットが登録されていません。『生徒情報・設定』でターゲット行動を登録してください。");
-    if(!target && !noTargets) errs.push("ターゲット行動を選択してください。");
-    if(currentTrials.length === 0) errs.push("試行（＋/－/P）が0回です。最低1回は記録してください。");
-    setInvalid(elChild, !child);
-    setInvalid(elTeacher, !teacher);
-    setInvalid(elTask, !task);
-    setInvalid(elTarget, (!target && !noTargets) || noTargets);
-    showErrors(errs);
-    const btnA = document.getElementById("btnSaveSessionSticky");
-    const btnB = document.getElementById("btnSaveSession");
-    const disabled = errs.length > 0;
-    if(btnA) btnA.disabled = disabled;
-    if(btnB) btnB.disabled = disabled;
-    return !disabled;
-  }
-function saveSession(){
-    if(!validateSession()) return;
-    const child = $("childSelect")?.value || "";
-    const teacher = $("teacherSelect")?.value || "";
-    const task = $("taskSelect")?.value || "";
-    const target = $("targetSelect")?.value || "";
-    const targetSd = getTargetSd(target);
-    const note = ($("sessionNote")?.value || "").trim();
-    const goal = clampInt($("trialGoal")?.value, 10, 1, 30);
-    const reinforcerRanks = ["reinforcer1","reinforcer2","reinforcer3","reinforcer4","reinforcer5"]
-      .map(id => $(id)?.value || "");
-    const id = (crypto.randomUUID ? crypto.randomUUID() : (Date.now() + Math.random()).toString(16));
-    const datetime = new Date().toISOString();
-    const st = calcStats(currentTrials);
-    sessions.push({
-      targetSd,
-      id, datetime, child, teacher, task, target,
-      marks: [...currentTrials],
-      goal,
-      rate: st.rate,
-      note,
-reinforcerRanks
-    });
-    $("sessionNote") && ($("sessionNote").value = "");
-    currentTrials = [];
-    updateTrialUI();
-    updateBigCounters();
-    if(!saveAll()) return;
-    updateHome();
-    renderLogs();
-    renderChart();
-    renderMiniDashboard();
-    renderAnalysis();
-    alert("保存しました。");
-  }
-  // --- Home dashboard ---
-  function updateHome(){
-    $("dashStudents") && ($("dashStudents").textContent = String(students.length));
-    $("dashSessions") && ($("dashSessions").textContent = String(sessions.length));
-    if(sessions.length === 0){
-      $("dashAvgRate") && ($("dashAvgRate").textContent = "0%");
-      $("dashLastSession") && ($("dashLastSession").textContent = "まだDTT記録がありません。");
-      const t = $("homeStudentTable");
-      if(t) t.innerHTML = "";
-      return;
-    }
-    const avg = Math.round(sessions.reduce((a,s)=>a+(Number(s.rate)||0),0)/sessions.length);
-    $("dashAvgRate") && ($("dashAvgRate").textContent = `${avg}%`);
-    const sorted = sessions.slice().sort((a,b)=> new Date(b.datetime)-new Date(a.datetime));
-    const last = sorted[0];
-    const d = new Date(last.datetime);
-    const ds = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
-    $("dashLastSession") && ($("dashLastSession").textContent = `${ds}　${last.child} / ${last.task} / ${last.target}（${last.rate}%）`);
-    // per student latest (same table as old)
-    const by = new Map();
-    sessions.forEach(s=>{
-      if(!by.has(s.child)) by.set(s.child, []);
-      by.get(s.child).push(s);
-    });
-    const table = $("homeStudentTable");
-    if(table){
-      let html = "<thead><tr><th style='width:140px'>生徒</th><th>最新の課題・ターゲット</th><th style='width:120px'>最新成功率</th><th style='width:160px'>最終記録日時</th></tr></thead><tbody>";
-      students.forEach(name=>{
-        const list = (by.get(name) || []).slice().sort((a,b)=> new Date(b.datetime)-new Date(a.datetime));
-        if(list.length === 0){
-          html += `<tr data-student='${escapeHtml(name)}' style='cursor:pointer'><td>${escapeHtml(name)}</td><td>-</td><td class='num'>-</td><td class='center'>-</td></tr>`;
-        }else{
-          const s = list[0];
-          const dd = new Date(s.datetime);
-          const ddStr = `${dd.getMonth()+1}/${dd.getDate()} ${String(dd.getHours()).padStart(2,"0")}:${String(dd.getMinutes()).padStart(2,"0")}`;
-          html += `<tr data-student='${escapeHtml(name)}' style='cursor:pointer'><td>${escapeHtml(name)}</td><td>${escapeHtml(s.task)} / ${escapeHtml(s.target)}</td><td class='num'>${s.rate}%</td><td class='center'>${ddStr}</td></tr>`;
+    (function(){
+      function hidePromptTypeUI(){
+        const sel = document.getElementById('promptType');
+        if(sel){
+          // ラベル（直前のlabel）を隠す
+          const prev = sel.previousElementSibling;
+          if(prev && prev.tagName === 'LABEL' && (prev.textContent||'').includes('プロンプト')){
+            prev.style.display = 'none';
+          }
+          // select自体は残したまま非表示 & 固定
+          sel.value = '';          // 未指定
+          sel.disabled = true;     // 変更できないよう固定
+          sel.style.display = 'none';
         }
-      });
-      html += "</tbody>";
-      table.innerHTML = html;
-      table.querySelectorAll("tr[data-student]").forEach(tr=>{
-        tr.addEventListener("click", ()=>{
-          const name = tr.getAttribute("data-student") || "";
-          const sel = document.getElementById("profileStudentSelect");
-          if(sel){ sel.value = name; loadProfileToForm(); }
-          switchView("view-students");
+      }
+
+      function hidePromptColumns(){
+        // 記録一覧など、表に「プロンプト」列が出る場合だけ隠す
+        document.querySelectorAll('table').forEach(tbl=>{
+          const headRow = tbl.querySelector('thead tr');
+          if(!headRow) return;
+          const ths = Array.from(headRow.children);
+          const idxs = [];
+          ths.forEach((th, i)=>{
+            const t = (th.textContent||'').trim();
+            if(t.includes('プロンプト')) idxs.push(i);
+          });
+          if(!idxs.length) return;
+
+          // thを隠す
+          idxs.forEach(i=>{
+            const th = ths[i];
+            if(th) th.style.display = 'none';
+          });
+
+          // tdを隠す
+          tbl.querySelectorAll('tbody tr').forEach(tr=>{
+            const tds = Array.from(tr.children);
+            idxs.forEach(i=>{
+              const td = tds[i];
+              if(td) td.style.display = 'none';
+            });
+          });
         });
-      });
-    }
-  }
-  // --- Filters ---
-  function getFilteredSessions(){
-    const child = $("graphStudentFilter")?.value || "";
-    const task = $("logTaskFilter")?.value || "";
-    const target = $("logTargetFilter")?.value || "";
-    return sessions.filter(s=>{
-      if(child && s.child !== child) return false;
-      if(task && s.task !== task) return false;
-      if(target && s.target !== target) return false;
-      return true;
-    });
-  }
-  // --- Logs list ---
-  function deleteSession(id){
-    const idx = sessions.findIndex(s=>s.id===id);
-    if(idx < 0) return;
-    if(!confirm("この記録を削除しますか？")) return;
-    sessions.splice(idx, 1);
-    if(!saveAll()) return;
-    updateHome();
-    renderLogs();
-    renderChart();
-    renderMiniDashboard();
-    renderAnalysis();
-  }
-  function renderLogs(){
-    const box = $("sessionList");
-    if(!box) return;
-    const list = getFilteredSessions().slice().sort((a,b)=> new Date(b.datetime)-new Date(a.datetime));
-    if(list.length === 0){
-      box.innerHTML = "<div class='note-text'>該当する記録がありません。</div>";
-      return;
-    }
-    box.innerHTML = list.map(s=>{
-      const d = new Date(s.datetime);
-      const ds = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
-      const st = calcStats(s.marks);
-      const ranks = (Array.isArray(s.reinforcerRanks)?s.reinforcerRanks:[]).filter(Boolean).slice(0,5);
-      const ranksText = ranks.length ? ranks.map((r,i)=>`#${i+1} ${escapeHtml(r)}`).join(" / ") : "未指定";
-      const note = s.note ? escapeHtml(s.note) : "<span class='muted'>-</span>";      return `
-        <div class="log-item">
-          <div class="log-top">
-            <div class="log-title">${escapeHtml(s.child)}　<span class="muted">(${ds})</span></div>
-            <div class="log-rate">${st.rate}%</div>
-          </div>
-          <div class="log-meta">
-            <span class="tag">課題：${escapeHtml(s.task)}</span>
-            <span class="tag">ターゲット：${escapeHtml(s.target)}</span>
-            ${s.targetSd?`<span class="tag">指示（SD）：${escapeHtml(s.targetSd)}</span>`:""}
-            <span class="tag">講師：${escapeHtml(s.teacher)}</span>
-          </div>
-          <div class="log-meta" style="margin-top:6px;">
-            <span class="tag">強化子：${ranksText}</span>
-            <span class="tag">試行：+${st.plus}/-${st.minus}/P${st.p}（${st.total}）</span>
-          </div>
-          <div class="log-note">${note}</div>
-          <div class="log-actions">
-            <button class="btn btn-outline" data-del="${escapeHtml(s.id)}">削除</button>
-          </div>
-        </div>
-      `;
-    }).join("");
-    box.querySelectorAll("button[data-del]").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        const id = btn.getAttribute("data-del");
-        deleteSession(id);
-      });
-    });
-  }
-  // --- Chart (canvas) ---
-  function groupByDay(listAsc){
-    const map = new Map();
-    listAsc.forEach(s=>{
-      const d = new Date(s.datetime);
-      const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-      if(!map.has(key)) map.set(key, {date:key, sum:0, n:0});
-      const g = map.get(key);
-      g.sum += Number(s.rate||0);
-      g.n += 1;
-    });
-    return Array.from(map.values()).sort((a,b)=>a.date.localeCompare(b.date)).map(g=>({date:g.date, rate:g.n?Math.round(g.sum/g.n):0}));
-  }
-  function renderChart(){
-    const canvas = $("sessionChart");
-    if(!canvas) return;
-    const ctx = canvas.getContext("2d");
-    const rect = canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = Math.floor(rect.width*dpr);
-    canvas.height = Math.floor(rect.height*dpr);
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-    const list = getFilteredSessions().slice().sort((a,b)=> new Date(a.datetime)-new Date(b.datetime)); // oldest->newest
-    const points = groupByDay(list);
-    const w = rect.width, h = rect.height;
-    ctx.clearRect(0,0,w,h);
-    const padL=38, padR=16, padT=16, padB=26;
-    const plotW = w-padL-padR;
-    const plotH = h-padT-padB;
-    // axes
-    ctx.strokeStyle = "#d1d5db";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(padL, padT);
-    ctx.lineTo(padL, padT+plotH);
-    ctx.lineTo(padL+plotW, padT+plotH);
-    ctx.stroke();
-    ctx.font = "12px system-ui, -apple-system, Segoe UI, Roboto";
-    ctx.fillStyle = "#6b7280";
-    for(let i=0;i<=4;i++){
-      const yv = i*25;
-      const y = padT+plotH - (yv/100)*plotH;
-      ctx.strokeStyle = "#eef2f7";
-      ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(padL+plotW,y); ctx.stroke();
-      ctx.fillText(String(yv), 8, y+4);
-    }
-    if(points.length === 0){
-      ctx.fillStyle = "#94a3b8";
-      ctx.fillText("データがありません（フィルタを変更してください）", padL+8, padT+20);
-      return;
-    }
-    const toX = (i)=> padL + (points.length===1?0:(i/(points.length-1))*plotW);
-    const toY = (v)=> padT+plotH - (v/100)*plotH;
-    ctx.strokeStyle = "#2563eb";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    points.forEach((p,i)=>{
-      const x = toX(i), y = toY(p.rate);
-      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-    });
-    ctx.stroke();
-    ctx.fillStyle = "#2563eb";
-    points.forEach((p,i)=>{
-      const x=toX(i), y=toY(p.rate);
-      ctx.beginPath(); ctx.arc(x,y,3.4,0,Math.PI*2); ctx.fill();
-    });
-    // x labels
-    const step = Math.max(1, Math.floor(points.length/6));
-    ctx.fillStyle="#6b7280";
-    for(let i=0;i<points.length;i+=step){
-      const x=toX(i);
-      const label = points[i].date.slice(5); // MM-DD
-      ctx.save();
-      ctx.translate(x, padT+plotH+18);
-      ctx.rotate(-0.35);
-      ctx.fillText(label, -10, 0);
-      ctx.restore();
-    }
-  }
-  // --- Mini dashboard (旧HTMLのIDsに合わせる) ---
-  function renderMiniDashboard(){
-    const child = $("graphStudentFilter")?.value || "";
-    const summaryEl = $("studentMiniSummary");
-    const tableEl = $("studentMiniTable");
-    if(!summaryEl || !tableEl) return;
-    if(!child){
-      summaryEl.textContent = "生徒フィルタで1名を選択すると、ここに概要が表示されます。";
-      tableEl.innerHTML = "";
-      return;
-    }
-    const list = sessions.filter(s=>s.child===child).slice().sort((a,b)=> new Date(b.datetime)-new Date(a.datetime));
-    if(list.length === 0){
-      summaryEl.textContent = "この生徒の記録がありません。";
-      tableEl.innerHTML = "";
-      return;
-    }
-    const allMarks = list.flatMap(s=>s.marks||[]);
-    const st = calcStats(allMarks);
-    const pr = st.total ? Math.round((st.p/st.total)*100) : 0;
-    summaryEl.innerHTML = `成功率 <b>${st.rate}%</b> ／ P率 <b>${pr}%</b> ／ 記録 <b>${list.length}</b> 件`;
-    // group by task/target
-    const map = new Map(); // key=task|target
-    list.forEach(s=>{
-      const key = `${s.task}|||${s.target}`;
-      if(!map.has(key)) map.set(key, {task:s.task, target:s.target, sum:0, n:0});
-      const g = map.get(key);
-      g.sum += Number(s.rate||0);
-      g.n += 1;
-    });
-    const rows = Array.from(map.values()).sort((a,b)=> (b.n-b.n) || (b.sum/b.n)-(a.sum/a.n));
-    let html = "<thead><tr><th>課題</th><th>ターゲット</th><th style='width:110px'>平均成功率</th><th style='width:90px'>件数</th></tr></thead><tbody>";
-    rows.forEach(r=>{
-      const avg = r.n ? Math.round(r.sum/r.n) : 0;
-      html += `<tr><td>${escapeHtml(r.task)}</td><td>${escapeHtml(r.target)}</td><td>${avg}%</td><td>${r.n}</td></tr>`;
-    });
-    html += "</tbody>";
-    tableEl.innerHTML = html;
-  }
-  // --- Analysis table (旧HTMLのIDsに合わせる) ---
-  function renderAnalysis(){
-    const summaryEl = $("analysisSummary");
-    const tableEl = $("analysisTable");
-    if(!summaryEl || !tableEl) return;
-    const list = getFilteredSessions().slice().sort((a,b)=> new Date(b.datetime)-new Date(a.datetime));
-    if(list.length === 0){
-      summaryEl.textContent = "まだデータがありません。";
-      tableEl.innerHTML = "";
-      return;
-    }
-    const pos = new Map(); // trial index -> count of '-'
-    list.forEach(s=>{
-      (s.marks||[]).forEach((m,i)=>{
-        if(m === "-"){
-          const k = i+1;
-          pos.set(k, (pos.get(k)||0)+1);
-        }
-      });
-    });
-    const entries = Array.from(pos.entries()).sort((a,b)=> b[1]-a[1]);
-    if(entries.length === 0){
-      summaryEl.textContent = "ミス（－）がありません。";
-      tableEl.innerHTML = "";
-      return;
-    }
-    const top = entries[0];
-    summaryEl.innerHTML = `最も多いのは <b>${top[0]}回目</b>（<b>${top[1]}</b> 回）です。`;
-    let html = "<thead><tr><th style='width:120px'>何回目</th><th>ミス（－）回数</th></tr></thead><tbody>";
-    entries.slice(0, 20).forEach(([k,c])=>{
-      html += `<tr><td>${k}回目</td><td>${c}</td></tr>`;
-    });
-    html += "</tbody>";
-    tableEl.innerHTML = html;
-  }
-  // --- Backup / restore ---
-  function exportBackup(){
-    const payload = {
-      version: VERSION,
-      exportedAt: new Date().toISOString(),
-      sessions, students, teachers, tasks, targets, reinforcers
-    };
-    const blob = new Blob([JSON.stringify(payload, null, 2)], {type:"application/json;charset=utf-8"});
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "aba_backup.json";
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 0);
-  }
-  function importBackup(event){
-    const file = event?.target?.files?.[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = ()=>{
-      try{
-        const data = JSON.parse(String(reader.result||"{}"));
-        sessions = Array.isArray(data.sessions) ? data.sessions : [];
-        students = Array.isArray(data.students) ? data.students : [];
-        teachers = Array.isArray(data.teachers) ? data.teachers : [];
-        tasks = Array.isArray(data.tasks) ? data.tasks : [];
-        targets = Array.isArray(data.targets) ? data.targets : [];
-        reinforcers = Array.isArray(data.reinforcers) ? data.reinforcers : [];
-        if(!saveAll()) return;
-        refreshAllSelects();
-        renderAllViews();
-        updateHome();
-        renderLogs();
-        renderChart();
-        renderMiniDashboard();
-        renderAnalysis();
-        alert("バックアップを復元しました。");
-      }catch(e){
-        alert("復元に失敗しました（ファイル形式を確認してください）。");
-      }finally{
-        try{ event.target.value = ""; }catch(_){}
       }
-    };
-    reader.readAsText(file, "utf-8");
-  }
-  // --- CSV / PDF / Print chart ---
-  function exportCsv(){
-    const head = ["日時","生徒","講師","課題","ターゲット","指示（SD）","+数","-数","P数","合計","成功率","強化子(1-5)","メモ","試行列"];
-    const rows = [head];
-    sessions.slice().sort((a,b)=> new Date(a.datetime)-new Date(b.datetime)).forEach(s=>{
-      const st = calcStats(s.marks);
-      const ranks = (s.reinforcerRanks||[]).map(x=>x||"").join(" | ");
-      rows.push([
-        s.datetime||"", s.child||"", s.teacher||"", s.task||"", s.target||"", (s.targetSd||""),
-        String(st.plus), String(st.minus), String(st.p), String(st.total), String(st.rate),
-        ranks, (s.note||""), (s.marks||[]).join("")
-      ]);
-    });
-    const csv = rows.map(r=> r.map(v=> `"${String(v).replaceAll('"','""')}"`).join(",")).join("\n");
-    const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "aba_sessions.csv";
-    document.body.appendChild(a); a.click();
-    setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 0);
-  }
-  function openPdfReport(){
-    const list = getFilteredSessions().slice().sort((a,b)=> new Date(a.datetime)-new Date(b.datetime));
-    const rows = list.map(s=>{
-      const d=new Date(s.datetime);
-      const ds=`${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
-      const st = calcStats(s.marks);
-      const ranks = (s.reinforcerRanks||[]).filter(Boolean).slice(0,5).join(" / ") || "-";
-      return `<tr>
-        <td>${escapeHtml(ds)}</td><td>${escapeHtml(s.child||"")}</td><td>${escapeHtml(s.teacher||"")}</td>
-        <td>${escapeHtml(s.task||"")}</td><td>${escapeHtml(s.target||"")}</td><td>${escapeHtml(s.targetSd||"")}</td>
-        <td>+${st.plus}/-${st.minus}/P${st.p}（${st.total}）</td>
-        <td>${st.rate}%</td><td>${escapeHtml(ranks)}</td>
-        <td>${escapeHtml(s.note||"")}</td>
-      </tr>`;
-    }).join("");
-    const html = `<!doctype html><html><head><meta charset="utf-8"><title>ABAレポート</title>
-    <style>
-      body{font-family:system-ui,-apple-system,Segoe UI,Roboto;padding:16px;}
-      h1{font-size:16px;margin:0 0 12px 0}
-      table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:12px}
-      th,td{border:1px solid #e5e7eb;padding:6px;vertical-align:top;word-break:break-word}
-      th{background:#f8fafc}
-    </style></head><body>
-    <h1>DTT記録レポート（フィルタ適用）</h1>
-    <table>
-      <thead><tr>
-        <th style="width:140px">日時</th><th style="width:110px">生徒</th><th style="width:110px">講師</th>
-        <th style="width:120px">課題</th><th style="width:160px">ターゲット</th><th style="width:140px">指示（SD）</th>
-        <th style="width:160px">試行</th><th style="width:70px">成功率</th>
-        <th style="width:180px">強化子</th><th>メモ</th>
-      </tr></thead>
-      <tbody>${rows}</tbody>
-    </table>
-    <script>window.onload=()=>window.print();<\/script>
-    </body></html>`;
-    const win = window.open("", "_blank");
-    if(!win){ alert("ポップアップがブロックされました。"); return; }
-    win.document.open(); win.document.write(html); win.document.close();
-  }
-  function printChart(){
-    const canvas = $("sessionChart");
-    if(!canvas) return;
-    const dataUrl = canvas.toDataURL("image/png");
-    const win = window.open("", "_blank");
-    if(!win){ alert("ポップアップがブロックされました。"); return; }
-    win.document.open();
-    win.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>グラフ印刷</title></head>
-    <body style="margin:0;padding:16px;font-family:system-ui"><h1 style="font-size:16px;margin:0 0 10px 0;">成功率の推移</h1>
-    <img src="${dataUrl}" style="width:100%;max-width:960px">
-    <script>window.onload=()=>window.print();<\/script></body></html>`);
-    win.document.close();
-  }
-// --- 生徒リスト（追加） ---
-const STORAGE_KEY_STUDENT_PROFILES = "ABA_SCHPASS_STUDENT_PROFILES_V1";
-  const STORAGE_KEY_APP_SETTINGS = "ABA_SCHPASS_APP_SETTINGS_V1";
-  const STORAGE_KEY_ARCHIVE = "ABA_SCHPASS_ARCHIVE_V1";
-let studentProfiles = {}; // { [name]: { grade, tags, note, updatedAt } }
-function loadProfiles(){
-  studentProfiles = safeGet(STORAGE_KEY_STUDENT_PROFILES, {});
-  if(!studentProfiles || typeof studentProfiles !== "object" || Array.isArray(studentProfiles)) studentProfiles = {};
-}
-function saveProfiles(){
-  return safeSet(STORAGE_KEY_STUDENT_PROFILES, studentProfiles);
-}
-function getProfile(name){
-  if(!name) return null;
-  return studentProfiles[name] || null;
-}
-function setProfile(name, data){
-  if(!name) return false;
-  studentProfiles[name] = {
-    grade: (data.grade||"").trim(),
-    tags: (data.tags||"").trim(),
-    note: (data.note||"").trim(),
-    updatedAt: new Date().toISOString()
-  };
-  return true;
-}
-function renderProfileCards(){
-  const wrap = document.getElementById("profileCardList");
-  if(!wrap) return;
-  if(students.length === 0){
-    wrap.innerHTML = "<div class='note-text'>まだ生徒が登録されていません。</div>";
-    return;
-  }
-  wrap.innerHTML = students.map(name=>{
-    const p = getProfile(name) || {};
-    const grade = p.grade ? escapeHtml(p.grade) : "未設定";
-    const tags = p.tags ? escapeHtml(p.tags) : "";
-    const note = p.note ? (escapeHtml(p.note).slice(0,80) + (p.note.length>80?"…":"")) : "メモなし";
-    return `
-      <div class="profile-card" data-student="${escapeHtml(name)}">
-        <div class="name">${escapeHtml(name)}</div>
-        <div class="meta">学年：${grade}${tags?` / タグ：${tags}`:""}</div>
-        <div class="note">${note}</div>
-      </div>
-    `;
-  }).join("");
-  wrap.querySelectorAll(".profile-card").forEach(el=>{
-    el.addEventListener("click", ()=>{
-      const name = el.getAttribute("data-student") || "";
-      const sel = document.getElementById("profileStudentSelect");
-      if(sel){
-        sel.value = name;
-        loadProfileToForm();
-      }
-      switchView("view-students");
-    });
-  });
-}
-function updateProfileSummary(name){
-  const el = document.getElementById("profileSummary");
-  if(!el) return;
-  if(!name){ el.textContent = "生徒を選択すると表示されます。"; return; }
-  const p = getProfile(name);
-  if(!p){
-    el.textContent = "この生徒の台帳情報はまだありません（右上の入力欄で保存できます）。";
-    return;
-  }
-  const u = p.updatedAt ? new Date(p.updatedAt) : null;
-  const ds = u ? `${u.getFullYear()}/${u.getMonth()+1}/${u.getDate()} ${String(u.getHours()).padStart(2,"0")}:${String(u.getMinutes()).padStart(2,"0")}` : "-";
-  el.innerHTML = `更新：<b>${ds}</b> / 学年：<b>${escapeHtml(p.grade||"未設定")}</b> / タグ：<b>${escapeHtml(p.tags||"")}</b>`;
-}
-function loadProfileToForm(){
-  const sel = document.getElementById("profileStudentSelect");
-  const name = sel ? (sel.value||"") : "";
-  const p = getProfile(name) || {};
-  const grade = document.getElementById("profileGrade");
-  const tags = document.getElementById("profileTags");
-  const note = document.getElementById("profileNote");
-  if(grade) grade.value = p.grade || "";
-  if(tags) tags.value = p.tags || "";
-  if(note) note.value = p.note || "";
-  updateProfileSummary(name);
-}
-function clearProfileForm(){
-  const grade = document.getElementById("profileGrade");
-  const tags = document.getElementById("profileTags");
-  const note = document.getElementById("profileNote");
-  if(grade) grade.value = "";
-  if(tags) tags.value = "";
-  if(note) note.value = "";
-}
-function saveProfileFromForm(){
-  const sel = document.getElementById("profileStudentSelect");
-  const name = sel ? (sel.value||"") : "";
-  if(!name) return alert("生徒を選択してください。");
-  const grade = document.getElementById("profileGrade")?.value || "";
-  const tags = document.getElementById("profileTags")?.value || "";
-  const note = document.getElementById("profileNote")?.value || "";
-  setProfile(name, {grade, tags, note});
-  if(!saveProfiles()) return;
-  renderProfileCards();
-  updateProfileSummary(name);
-  alert("生徒リストを保存しました。");
-}
-  // Expose functions (旧HTMLのonclick用)
-  window.switchView = switchView;
-  window.addTrial = addTrial;
-  window.saveSession = saveSession;
-  window.addStudent = addStudent;
-  window.addTeacher = addTeacher;
-  window.addTask = addTask;
-  window.addTarget = addTarget;
-  window.addReinforcer = addReinforcer;
-  window.exportBackup = exportBackup;
-  window.importBackup = importBackup;
-  window.exportCsv = exportCsv;
-  window.openPdfReport = openPdfReport;
-  window.printChart = printChart;
-  // Init
-  document.addEventListener("DOMContentLoaded", ()=>{
-    // Master registration buttons (v16 fix)
-    const bind = (id, fn) => {
-      const el = document.getElementById(id);
-      if(!el) return;
-      el.addEventListener("click", (e)=>{ e.preventDefault(); fn(); });
-    };
-    bind("btnAddStudent", addStudent);
-    bind("btnAddTeacher", addTeacher);
-    bind("btnAddTask", addTask);
-    bind("btnAddReinforcer", addReinforcer);
-    bind("btnAddTarget", addTarget);
-    // Enter key submits (inputs)
-    const bindEnter = (inputId, fn) => {
-      const el = document.getElementById(inputId);
-      if(!el) return;
-      el.addEventListener("keydown", (e)=>{
-        if(e.key === "Enter"){
-          e.preventDefault();
-          fn();
-        }
+
+      // app.jsより先にUIを隠す（無い場合は後でも）
+      document.addEventListener('DOMContentLoaded', ()=>{
+        hidePromptTypeUI();
+        // app.jsがDOMを書き換えるので、少し遅らせて列も隠す
+        setTimeout(hidePromptColumns, 300);
+        setTimeout(hidePromptColumns, 1200);
       });
-    };
-    bindEnter("newStudentName", addStudent);
-    bindEnter("newTeacherName", addTeacher);
-    bindEnter("newTaskName", addTask);
-    bindEnter("newReinforcerName", addReinforcer);
-    bindEnter("newTargetName", addTarget);
-    bindEnter("newTargetSD", addTarget);
-    // --- Bind UI events even if inline onclick is blocked ---
-    // Profile
-    document.getElementById('profileStudentSelect')?.addEventListener('change', loadProfileToForm);
-    document.getElementById('btnSaveProfile')?.addEventListener('click', (e)=>{e.preventDefault(); saveProfileFromForm();});
-    document.getElementById('btnClearProfile')?.addEventListener('click', (e)=>{e.preventDefault(); clearProfileForm();});
-    // Menu
-    bindClick(".menu-item[data-view]", (_e, el)=> switchView(el.getAttribute("data-view")));
-    // Trial buttons
-bindClick('button[onclick^="addTrial(\'-\')"]', ()=> addTrial("-"));
-bindClick('button[onclick^="saveSession()"]', ()=> saveSession());
-    // Master add buttons
-    bindClick('button[onclick^="addStudent()"]', ()=> addStudent());
-    bindClick('button[onclick^="addTeacher()"]', ()=> addTeacher());
-    bindClick('button[onclick^="addTask()"]', ()=> addTask());
-    bindClick('button[onclick^="addTarget()"]', ()=> addTarget());
-    bindClick('button[onclick^="addReinforcer()"]', ()=> addReinforcer());
-    // Logs
-    bindClick('button[onclick^="exportBackup()"]', ()=> exportBackup());
-    bindClick('button[onclick^="exportCsv()"]', ()=> exportCsv());
-    bindClick('button[onclick^="openPdfReport()"]', ()=> openPdfReport());
-    bindClick('button[onclick^="printChart()"]', ()=> printChart());
-    loadAll();
-    applyAppSettings();
-    loadProfiles();
-    refreshAllSelects();
-    renderAllViews();
-    renderProfileCards();
-    updateHome();
-    renderLogs();
-    renderChart();
-    renderMiniDashboard();
-    renderAnalysis();
-    updateTrialUI();
-    // filters reactive (even if onchange exists, this is safer)
-    ["graphStudentFilter","logTaskFilter","logTargetFilter"].forEach(id=>{
-      const el = $(id);
-      if(!el) return;
-      el.addEventListener("change", ()=>{
-        renderLogs();
-        renderChart();
-        renderMiniDashboard();
-        renderAnalysis();
+
+      // SPA的に描画が変わるので、軽い監視で追従
+      const mo = new MutationObserver(()=>{
+        hidePromptTypeUI();
+        hidePromptColumns();
       });
-    });
-    // trial goal changes update kpi
-    $("trialGoal")?.addEventListener("change", updateTrialUI);
-    // Trials (no inline onclick to avoid double-count)
-    document.getElementById("btnTrialPlus")?.addEventListener("click", (e)=>{ e.preventDefault(); addTrial("+"); });
-    document.getElementById("btnTrialMinus")?.addEventListener("click", (e)=>{ e.preventDefault(); addTrial("-"); });
-    document.getElementById("btnTrialP")?.addEventListener("click", (e)=>{ e.preventDefault(); addTrial("P"); });
-    document.getElementById("btnUndoTrial")?.addEventListener("click", (e)=>{ e.preventDefault(); undoTrial(); });
-    document.getElementById("btnResetTrial")?.addEventListener("click", (e)=>{ e.preventDefault(); resetTrial(); });
-    document.getElementById("btnSaveSessionSticky")?.addEventListener("click", (e)=>{ e.preventDefault(); saveSession(); });
-    $("targetSelect")?.addEventListener("change", (e)=>{ updateTargetSdPreview(); validateSession(); });
-    $("taskSelect")?.addEventListener("change", (e)=>{ onSessionTaskChange(); validateSession(); });
-    $("targetTaskSelect")?.addEventListener("change", onTargetTaskChange);
-    $("editTargetSelect")?.addEventListener("change", loadEditTargetSd);
-    document.getElementById("btnSaveTargetSD")?.addEventListener("click", (e)=>{e.preventDefault(); saveEditTargetSd();});
-  });
-})();
-// --- PWA: Service Worker & Install prompt ---
-(function(){
-  if(!("serviceWorker" in navigator)) return;
-  window.addEventListener("load", ()=>{
-    /* v22: SW disabled */
-  });
-  let deferredPrompt = null;
-  const btn = document.getElementById("btnInstallPwa");
-  const hint = document.getElementById("installHint");
-  window.addEventListener("beforeinstallprompt", (e)=>{
-    e.preventDefault();
-    deferredPrompt = e;
-    if(hint) hint.style.display = "block";
-    if(btn) btn.style.display = "inline-flex";
-  });
-  if(btn){
-    btn.addEventListener("click", async ()=>{
-      if(!deferredPrompt) return;
-      deferredPrompt.prompt();
-      await deferredPrompt.userChoice.catch(()=>{});
-      deferredPrompt = null;
-      btn.style.display = "none";
-    });
-  }
-})();
-// --- PWA update helper (v2) ---
-(function(){
-  if(!("serviceWorker" in navigator)) return;
-  // When SW updated, ask it to activate immediately
-  navigator.serviceWorker.addEventListener("controllerchange", ()=>{
-    // reload once to use latest assets
-    if(window.__reloadedForSw) return;
-    window.__reloadedForSw = true;
-    window.location.reload();
-  });
-  navigator.serviceWorker.getRegistration("./").then((reg)=>{
-    if(!reg) return;
-    reg.addEventListener("updatefound", ()=>{
-      const newWorker = reg.installing;
-      if(!newWorker) return;
-      newWorker.addEventListener("statechange", ()=>{
-        if(newWorker.state === "installed" && navigator.serviceWorker.controller){
-          newWorker.postMessage({type:"SKIP_WAITING"});
-        }
-      });
-    });
-  }).catch(()=>{});
-})();
-  function applyAppSettings(){
-    const badge = document.getElementById("facilityBadge");
-    const name = (appSettings?.facilityName || "").trim();
-    if(badge){
-      if(name){
-        badge.style.display = "inline-flex";
-        badge.textContent = `🏢 ${name}`;
-      }else{
-        badge.style.display = "none";
-        badge.textContent = "";
-      }
-    }
-    const input = document.getElementById("facilityNameInput");
-    if(input && input.value !== name) input.value = name;
-    const tgl = document.getElementById("toggleShowArchived");
-    if(tgl) tgl.checked = !!appSettings?.showArchived;
-  }
-  function renderAllViews(){
-    // existing functions
-    try{ refreshAllSelects(); }catch(e){}
-    try{ renderAllViews(); }catch(e){}
-    try{ renderLogs(); }catch(e){}
-    try{ renderStudents(); }catch(e){}
-    try{ applyAppSettings(); }catch(e){}
-  }
-  function exportCSV(){
-    if(!sessions || sessions.length===0){
-      toast("エクスポートできる記録がありません", "", "warn");
-      return;
-    }
-    // Flatten session object to CSV
-    const cols = ["date","time","student","teacher","task","target","sd","plus","minus","prompt","successRate","reinforcer","note"];
-    const rows = sessions.map(s=>{
-      const p = (s.trials||[]).filter(x=>x==="+" ).length;
-      const m = (s.trials||[]).filter(x=>x==="-" ).length;
-      const pr = (s.trials||[]).filter(x=>x==="P").length;
-      const total = p+m+pr;
-      const rate = total ? Math.round((p/total)*1000)/10 : 0;
-      return {
-        date: s.date || "",
-        time: s.time || "",
-        student: s.student || s.child || "",
-        teacher: s.teacher || "",
-        task: s.task || "",
-        target: s.target || "",
-        sd: s.targetSd || s.sd || "",
-        plus: p,
-        minus: m,
-        prompt: pr,
-        successRate: rate,
-        reinforcer: s.reinforcer || "",
-        note: (s.note || s.sessionNote || "").replace(/\n/g," ")
-      };
-    });
-    const esc = (v)=>{
-      const s = String(v ?? "");
-      if(/[",\n]/.test(s)) return '"' + s.replace(/"/g,'""') + '"';
-      return s;
-    };
-    const head = cols.join(",");
-    const body = rows.map(r=> cols.map(c=>esc(r[c])).join(",")).join("\n");
-    const csv = head + "\n" + body;
-    const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
-    const a = document.createElement("a");
-    const ts = new Date().toISOString().slice(0,10);
-    a.href = URL.createObjectURL(blob);
-    a.download = `aba_dtt_sessions_${ts}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    toast("CSVを出力しました", "記録一覧のエクスポート", "success");
-  }
-// ===== v22: robust bindings (no inline onclick needed) =====
-document.addEventListener("DOMContentLoaded", () => {
-  // Navigation
-  document.querySelectorAll(".menu-item[data-view]").forEach(btn=>{
-    btn.addEventListener("click", (e)=>{
-      e.preventDefault();
-      const viewId = btn.getAttribute("data-view");
-      if(viewId && typeof switchView === "function") switchView(viewId);
-    });
-  });
-  // Ensure all primary action buttons are type=button (avoid form submit)
-  document.querySelectorAll("button").forEach(b=>{
-    if(!b.getAttribute("type")) b.setAttribute("type","button");
-  });
-});
-</script>
-  <div id="toastHost" class="toast-host" aria-live="polite"></div>
+      mo.observe(document.documentElement, {childList:true, subtree:true});
+      window.__hidePromptTypePatch = {hidePromptTypeUI, hidePromptColumns};
+    })();
+  </script>
+
+  <script src="./assets/app.js?v=1767659239"></script>
 </body>
 </html>
