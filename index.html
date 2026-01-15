@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>DTT記録ツール</title>
+
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#2563eb">
+  <link rel="apple-touch-icon" href="./assets/icons/icon-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-soft: #dbeafe;
+      --bg: #f3f4f6;
+      --card-bg: #ffffff;
+      --border-soft: #e5e7eb;
+      --text-main: #111827;
+      --text-sub: #6b7280;
+      --success: #16a34a;
+      --danger: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+    }
+    .layout {
+      display: flex;
+      min-height: 100vh;
+      background: var(--bg);
+    }
+    .sidebar {
+      width: 230px;
+      background: #020617;
+      color: #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      padding: 12px 10px;
+      gap: 12px;
+    }
+    .app-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,0.4);
+      margin-bottom: 4px;
+    }
+    .app-logo-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #38bdf8, #6366f1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    .app-logo-text {
+      display: flex;
+      flex-direction: column;
+      font-size: 13px;
+    }
+    .app-logo-title {
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .app-logo-sub {
+      font-size: 10px;
+      color: #9ca3af;
+    }
+    .side-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 4px;
+    }
+    .menu-label {
+      font-size: 11px;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 4px 6px 2px;
+    }
+    .menu-item {
+      border: none;
+      background: transparent;
+      color: #e5e7eb;
+      font-size: 13px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .menu-item span.icon {
+      width: 18px;
+      text-align: center;
+      font-size: 15px;
+    }
+    .menu-item span.label {
+      flex: 1;
+    }
+    .menu-item.active {
+      background: rgba(37,99,235,0.18);
+      color: #bfdbfe;
+      box-shadow: inset 0 0 0 1px rgba(37,99,235,0.65);
+    }
+    .menu-item:not(.active):hover {
+      background: rgba(15,23,42,0.9);
+    }
+    .sidebar-footer {
+      margin-top: auto;
+      font-size: 10px;
+      color: #6b7280;
+      padding: 6px;
+      border-top: 1px solid rgba(30,64,175,0.9);
+    }
+    .main {
+      flex: 1;
+      padding: 12px 16px 20px;
+    }
+    .app-container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .topbar-title h1 {
+      font-size: 18px;
+      margin: 0;
+      font-weight: 600;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 14px 16px 16px;
+      margin-bottom: 14px;
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 4px 14px rgba(15,23,42,0.06);
+    }
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+    .card-title span.emoji {
+      font-size: 18px;
+    }
+    .card-description {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 6px;
+    }
+    .row > div {
+      flex: 1;
+      min-width: 150px;
+    }
+    label {
+      font-size: 12px;
+      display: block;
+      margin-top: 6px;
+      margin-bottom: 2px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 6px 9px;
+      font-size: 13px;
+      border-radius: 8px;
+      border: 1px solid var(--border-soft);
+      background: #f9fafb;
+    }
+    textarea {
+      min-height: 50px;
+      resize: vertical;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 0 0 2px rgba(37,99,235,0.15);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 7px 12px;
+      font-size: 12px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      margin-right: 8px;
+      white-space: nowrap;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-outline { background: #fff; color: var(--primary); border: 1px solid var(--primary-soft); }
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-fail { background: var(--danger); color: #fff; }
+    .btn-prompt { background: #fbbf24; color: #111827; }
+    .btn-save {
+      background: var(--primary);
+      color: #fff;
+      width: 100%;
+      margin-top: 10px;
+      padding: 9px 14px;
+      font-weight: 600;
+    }
+    .pill {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-size: 11px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      margin: 2px;
+    }
+    .note-text {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-top: 4px;
+    }
+    .kpi-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .kpi-card {
+      flex: 1;
+      min-width: 140px;
+      background: #f9fafb;
+      border-radius: 12px;
+      padding: 8px 10px;
+      border: 1px solid #e5e7eb;
+    }
+    .kpi-label {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-bottom: 2px;
+    }
+    .kpi-value {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .kpi-sub {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-top: 2px;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #22c55e, #4ade80);
+      width: 0%;
+      transition: width 0.2s ease-out;
+    }
+    .trial-list {
+      font-size: 18px;
+      letter-spacing: 2px;
+      min-height: 24px;
+      padding: 4px 0;
+    }
+    .trial-list-empty {
+      font-size: 11px;
+      color: #9ca3af;
+    }
+    .view {
+      display: none;
+    }
+    .view.view-active {
+      display: block;
+    }
+    .session-list-item {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 8px 0 10px;
+      font-size: 12px;
+    }
+    .session-meta {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .tag {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      margin-right: 4px;
+      margin-bottom: 2px;
+    }
+    .tag-task { background: #ede9fe; color: #5b21b6; }
+    .tag-target { background: #dcfce7; color: #15803d; }
+    .tag-status-mastered { background:#dcfce7; color:#166534; }
+    .tag-status-review { background:#fee2e2; color:#b91c1c; }
+    .tag-status-continue { background:#e0f2fe; color:#1d4ed8; }
+    .trial-table-wrapper { margin-top: 4px; overflow-x: auto; }
+    .trial-table {
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    .trial-table th, .trial-table td {
+      border: 1px solid #e5e7eb;
+      padding: 2px 4px;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .trial-table th {
+      background: #f9fafb;
+    }
+    .reinforcer-ranks-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .reinforcer-ranks-row > div {
+      flex: 1;
+      min-width: 120px;
+    }
+    .reinforcer-rank-label {
+      font-size: 11px;
+      margin-bottom: 2px;
+      color: var(--text-sub);
+    }
+    .analysis-table {
+      border-collapse: collapse;
+      font-size: 11px;
+      margin-top: 6px;
+    }
+    .analysis-table th, .analysis-table td {
+      border: 1px solid #e5e7eb;
+      padding: 3px 6px;
+      text-align: center;
+    }
+    .analysis-table th {
+      background: #f9fafb;
+    }
+    .home-student-table {
+      border-collapse: collapse;
+      font-size: 11px;
+      margin-top: 8px;
+      width: 100%;
+    }
+    .home-student-table th, .home-student-table td {
+      border: 1px solid #e5e7eb;
+      padding: 4px 6px;
+      text-align: left;
+    }
+    .home-student-table th {
+      background: #f9fafb;
+    }
+    .mini-dashboard-table {
+      border-collapse: collapse;
+      font-size: 11px;
+      width: 100%;
+      margin-top: 4px;
+    }
+    .mini-dashboard-table th, .mini-dashboard-table td {
+      border: 1px solid #e5e7eb;
+      padding: 4px 6px;
+      text-align: left;
+    }
+    .mini-dashboard-table th {
+      background: #f9fafb;
+    }
+    .backup-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+      margin-top:6px;
+    }
+    .backup-row input[type="file"] {
+      padding:3px;
+      font-size:11px;
+      background:#f9fafb;
+    }
+    @media (max-width: 800px) {
+      .layout {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        height: auto;
+      }
+      .main {
+        padding: 10px 10px 16px;
+      }
+    }
+  
+    /* --- 生徒リスト（追加） --- */
+    .profile-card-list{
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap:10px;
+      margin-top:8px;
+    }
+    .profile-card{
+      border:1px solid rgba(148,163,184,.35);
+      background: rgba(255,255,255,.75);
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: 0 6px 18px rgba(15,23,42,.06);
+      cursor:pointer;
+      transition: transform .12s ease;
+    }
+    .profile-card:hover{ transform: translateY(-1px); }
+    .profile-card .name{ font-weight:800; }
+    .profile-card .meta{ color:#64748b; font-size:12px; margin-top:4px; }
+    .profile-card .note{ color:#0f172a; font-size:12px; margin-top:6px; line-height:1.45; }
+
+  
+    /* =========================
+       Mobile polish (v4)
+       ========================= */
+    @media (max-width: 900px){
+      body{ padding: 0; }
+      .app{ padding: 10px; }
+      .layout{ flex-direction: column; gap: 10px; }
+      .sidebar{
+        width: 100%;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        border-radius: 14px;
+        overflow: hidden;
+      }
+      .sidebar-inner{
+        display:flex;
+        flex-direction: row;
+        gap: 6px;
+        overflow-x: auto;
+        padding: 10px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .sidebar .brand{ display:none; }
+      .menu-item{
+        flex: 0 0 auto;
+        padding: 10px 12px;
+        border-radius: 12px;
+        white-space: nowrap;
+      }
+      .menu-item .icon{ margin-right: 6px; }
+      .content{ width: 100%; }
+      .card{ padding: 12px; border-radius: 16px; }
+      .card-title{ font-size: 16px; gap: 8px; }
+      .card-description{ font-size: 13px; line-height: 1.55; }
+
+      /* forms */
+      .form-grid{ grid-template-columns: 1fr !important; gap: 10px; }
+      .form-field .form-label{ font-size: 12px; }
+      .input, .select, .textarea{ font-size: 14px; padding: 12px 12px; }
+      .textarea{ min-height: 110px; }
+
+      /* buttons */
+      .btn-row{ gap: 8px; flex-wrap: wrap; }
+      .btn{ width: 100%; justify-content: center; padding: 12px 12px; }
+      .btn.btn-outline{ width: 100%; }
+
+      /* tables */
+      .table-wrap{ overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 12px; }
+      table{ min-width: 720px; } /* allow scroll instead of squish */
+      th, td{ padding: 10px 10px; }
+      th{ font-size: 12px; }
+      td{ font-size: 13px; }
+      td.num, th.num{ text-align: right; font-variant-numeric: tabular-nums; }
+      td.center, th.center{ text-align: center; }
+
+      /* chips */
+      .tag{ padding: 6px 10px; border-radius: 999px; font-size: 12px; }
+
+      /* profile cards grid */
+      .profile-card-list{ grid-template-columns: 1fr !important; }
+    }
+
+    @media (max-width: 380px){
+      .menu-item .label{ display:none; } /* icons only on very small screens */
+      .menu-item .icon{ margin-right: 0; }
+    }
+
+  
+    /* =========================
+       Spacing & type tidy (v5)
+       ========================= */
+    :root{
+      --sp-1: 4px;
+      --sp-2: 8px;
+      --sp-3: 12px;
+      --sp-4: 16px;
+      --sp-5: 20px;
+
+      --fs-1: 12px;
+      --fs-2: 13px;
+      --fs-3: 14px;
+      --fs-4: 16px;
+      --fs-5: 18px;
+
+      --lh: 1.55;
+    }
+
+    /* Normalize */
+    *{ box-sizing: border-box; }
+    .card, .sidebar, .menu-item, .btn, .input, .select, .textarea{ border-radius: 14px; }
+    .card{ padding: var(--sp-4); }
+    .card-title{
+      font-size: var(--fs-5);
+      line-height: 1.25;
+      margin: 0;
+      padding: 0;
+      gap: var(--sp-2);
+      align-items: center;
+    }
+    .card-title .emoji{ font-size: 18px; }
+    .card-description{
+      margin-top: var(--sp-2);
+      font-size: var(--fs-2);
+      line-height: var(--lh);
+    }
+    .divider{ margin: var(--sp-4) 0; opacity: .85; }
+
+    .form-grid{ gap: var(--sp-3); }
+    .form-field{ margin: 0; }
+    .form-label{ font-size: var(--fs-1); margin-bottom: var(--sp-1); }
+    .hint-text, .note-text{ font-size: var(--fs-1); line-height: var(--lh); margin-top: var(--sp-1); }
+    .input, .select, .textarea{
+      font-size: var(--fs-3);
+      padding: 12px 12px;
+      line-height: 1.3;
+    }
+    .textarea{ min-height: 120px; }
+
+    .btn-row{ gap: var(--sp-2); margin-top: var(--sp-3); }
+    .btn{
+      font-size: var(--fs-3);
+      padding: 12px 12px;
+      min-height: 44px;
+    }
+
+    .tag{
+      font-size: var(--fs-1);
+      padding: 6px 10px;
+      margin: 0 var(--sp-2) var(--sp-2) 0;
+      border-radius: 999px;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    /* Sidebar/menu sizing consistency */
+    .menu-item{
+      min-height: 44px;
+      gap: var(--sp-1);
+      font-size: var(--fs-2);
+      padding: 10px 12px;
+      align-items: center;
+    }
+    .menu-item .icon{ font-size: 16px; line-height: 1; }
+
+    /* Table readability + aligned columns */
+    th, td{ font-variant-numeric: tabular-nums; }
+    th{ font-size: var(--fs-1); }
+    td{ font-size: var(--fs-2); }
+
+    /* Mobile fine-tuning: reduce wasted space */
+    @media (max-width: 900px){
+      .app{ padding: 8px; }
+      .card{ padding: 12px; }
+      .sidebar-inner{ padding: 8px; gap: 6px; }
+      .menu-item{ padding: 10px 12px; }
+      .card-title{ font-size: var(--fs-4); }
+      .card-description{ font-size: var(--fs-2); }
+      .divider{ margin: 12px 0; }
+      .btn-row{ margin-top: 10px; }
+      .input, .select, .textarea{ padding: 12px 12px; }
+    }
+
+    @media (max-width: 380px){
+      .app{ padding: 6px; }
+      .sidebar-inner{ padding: 6px; }
+      .card{ padding: 10px; }
+    }
+
+  
+    /* =========================
+       UX upgrade (v8)
+       ========================= */
+    :root{
+      --surface: rgba(255,255,255,.80);
+      --surface-2: rgba(255,255,255,.62);
+      --stroke: rgba(148,163,184,.35);
+      --shadow: 0 14px 32px rgba(15,23,42,.10);
+      --shadow-2: 0 10px 22px rgba(15,23,42,.08);
+      --radius: 16px;
+      --radius-lg: 20px;
+    }
+    .card{ box-shadow: var(--shadow); border: 1px solid var(--stroke); }
+    .btn{ box-shadow: var(--shadow-2); }
+    .btn-outline{ box-shadow: none; }
+
+    .steps{
+      display:flex;
+      gap:8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    .step{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border: 1px solid var(--stroke);
+      border-radius: 999px;
+      background: var(--surface-2);
+      font-size: 12px;
+      color: #0f172a;
+    }
+    .step-num{
+      width: 22px;
+      height: 22px;
+      display:grid;
+      place-items:center;
+      border-radius: 999px;
+      background: rgba(37,99,235,.12);
+      color: #1d4ed8;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .trial-board{
+      margin-top: 10px;
+      border: 1px solid var(--stroke);
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 12px;
+    }
+    .trial-metrics{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .metric{
+      border: 1px solid rgba(148,163,184,.28);
+      background: rgba(255,255,255,.68);
+      border-radius: var(--radius);
+      padding: 10px;
+      min-height: 72px;
+    }
+    .metric-wide{ grid-column: span 1; }
+    .metric-label{
+      font-size: 12px;
+      color: #475569;
+      font-weight: 700;
+    }
+    .metric-value{
+      margin-top: 6px;
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: .2px;
+      color: #0f172a;
+    }
+    .metric-suffix{ font-size: 14px; margin-left: 4px; color:#334155; font-weight: 800; }
+
+    .trial-actions{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .btn-big{
+      min-height: 52px;
+      font-size: 16px;
+      font-weight: 800;
+      border-radius: 16px;
+    }
+    .trial-secondary{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .save-bar{
+      position: sticky;
+      bottom: 10px;
+      margin-top: 14px;
+      padding: 10px 12px;
+      border-radius: 18px;
+      border: 1px solid rgba(148,163,184,.35);
+      background: rgba(15,23,42,.90);
+      color: #e2e8f0;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 16px 44px rgba(2,6,23,.35);
+      backdrop-filter: blur(10px);
+    }
+    .save-bar-title{ font-weight: 900; font-size: 13px; }
+    .save-bar-sub{ font-size: 12px; color: rgba(226,232,240,.82); margin-top: 2px; }
+    .save-bar .btn{ box-shadow: none; min-height: 44px; border-radius: 14px; }
+
+    /* Mobile: metrics wrap + less wasted space */
+    @media (max-width: 900px){
+      .trial-metrics{ grid-template-columns: 1fr 1fr; }
+      .metric-wide{ grid-column: span 2; }
+      .metric-value{ font-size: 24px; }
+      .trial-actions{ grid-template-columns: 1fr; }
+      .trial-secondary{ grid-template-columns: 1fr; }
+      .save-bar{ bottom: 8px; }
+    }
+
+  
+    .section-hd{
+      margin-top: 12px;
+      margin-bottom: 6px;
+      font-size: 12px;
+      font-weight: 900;
+      color: #0f172a;
+      opacity: .85;
+    }
+    .tag-wrap{ display:flex; flex-wrap:wrap; gap:8px; }
+    .muted{ opacity: .65; font-size: 11px; font-weight: 700; }
+
+  
+    /* =========================
+       Settings redesign (v12)
+       ========================= */
+    .panel-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .panel{
+      border: 1px solid rgba(148,163,184,.30);
+      background: rgba(255,255,255,.70);
+      border-radius: 18px;
+      overflow: hidden;
+    }
+    .panel-wide{ grid-column: 1 / -1; }
+    .panel-hd{
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(148,163,184,.22);
+      background: rgba(248,250,252,.85);
+      display:flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .panel-title{ font-weight: 900; font-size: 14px; color:#0f172a; }
+    .panel-sub{ font-size: 12px; color:#475569; }
+    .panel-body{ padding: 12px 14px; }
+    .inline-form{
+      display:grid;
+      grid-template-columns: 1fr 110px;
+      gap: 10px;
+      align-items: center;
+    }
+    .btn-compact{ min-height: 44px; }
+    .panel-list{
+      margin-top: 10px;
+      display:flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: flex-start;
+      min-height: 38px;
+    }
+    .panel-list .tag{ margin: 0; }
+
+    .target-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 10px;
+      align-items: end;
+    }
+    .target-grid-actions{ display:flex; }
+    .target-grid-actions .btn{ min-width: 180px; }
+
+    .details{
+      margin-top: 12px;
+      border: 1px solid rgba(148,163,184,.22);
+      border-radius: 14px;
+      background: rgba(255,255,255,.65);
+      padding: 10px 12px;
+    }
+    .details > summary{
+      cursor: pointer;
+      font-weight: 900;
+      font-size: 13px;
+      color:#0f172a;
+      list-style: none;
+    }
+    .details > summary::-webkit-details-marker{ display:none; }
+    .details[open] > summary{ margin-bottom: 10px; }
+
+    .edit-sd{ max-width: 560px; }
+
+    @media (max-width: 900px){
+      .panel-grid{ grid-template-columns: 1fr; }
+      .inline-form{ grid-template-columns: 1fr; }
+      .target-grid{ grid-template-columns: 1fr; }
+      .target-grid-actions .btn{ width: 100%; min-width: 0; }
+    }
+
+  
+    /* =========================
+       Production UX pack (v14)
+       ========================= */
+    .master-list-hint{
+      margin-top: 6px;
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.4;
+    }
+    .tag.editable{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .tag .x{
+      display:inline-grid;
+      place-items:center;
+      width:18px;
+      height:18px;
+      border-radius:999px;
+      background: rgba(15,23,42,.08);
+      color:#0f172a;
+      font-weight: 900;
+      line-height: 1;
+      cursor:pointer;
+    }
+    .tag .x:hover{ background: rgba(15,23,42,.14); }
+
+    .errors{
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(239,68,68,.35);
+      background: rgba(254,242,242,.85);
+      color: #7f1d1d;
+      font-size: 13px;
+      line-height: 1.55;
+      font-weight: 800;
+    }
+    .errors ul{ margin: 0; padding-left: 18px; }
+    .errors li{ margin: 2px 0; }
+    .is-invalid{
+      outline: 2px solid rgba(239,68,68,.35);
+      border-color: rgba(239,68,68,.55) !important;
+      background: rgba(254,242,242,.60) !important;
+    }
+
+  
+    /* =========================
+       Enterprise polish (v15)
+       ========================= */
+    .facility-badge{
+      margin-left: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 12px;
+      color: #0f172a;
+      background: rgba(37,99,235,.12);
+      border: 1px solid rgba(37,99,235,.25);
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      vertical-align: middle;
+    }
+    .chk{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      font-weight: 800;
+      color:#0f172a;
+      font-size: 13px;
+      user-select:none;
+    }
+    .chk input{ width:18px; height:18px; }
+
+    .toast-host{
+      position: fixed;
+      z-index: 9999;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .toast{
+      pointer-events: none;
+      border-radius: 16px;
+      padding: 12px 14px;
+      border: 1px solid rgba(148,163,184,.25);
+      background: rgba(2,6,23,.92);
+      color: #e5e7eb;
+      font-weight: 800;
+      font-size: 13px;
+      line-height: 1.4;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      transform: translateY(10px);
+      opacity: 0;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .toast.show{ opacity: 1; transform: translateY(0); }
+    .toast .t-title{ font-weight: 900; }
+    .toast .t-sub{ font-weight: 700; color: rgba(229,231,235,.85); margin-top: 2px; }
+    .toast.success{ border-color: rgba(34,197,94,.35); }
+    .toast.warn{ border-color: rgba(245,158,11,.35); }
+    .toast.error{ border-color: rgba(239,68,68,.35); }
+
+  </style>
+  </head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="app-logo">
+      <div class="app-logo-icon">AB</div>
+      <div class="app-logo-text">
+        <div class="app-logo-title">DTT記録ツール</div>
+        <div class="app-logo-sub">スクパス風ビュー</div>
+      </div>
+    </div>
+    <div class="menu-label">メニュー</div>
+    <nav class="side-menu">
+      <button class="menu-item active" data-view="view-home" onclick="switchView('view-home')">
+        <span class="icon">🏠</span><span class="label">ホーム</span>
+      </button>
+      <button class="menu-item" data-view="view-session" onclick="switchView('view-session')">
+        <span class="icon">✏️</span><span class="label">DTT記録</span>
+      </button>
+      <button class="menu-item" data-view="view-master" onclick="switchView('view-master')">
+        <span class="icon">🧩</span><span class="label">生徒情報・設定</span>
+      </button>
+      
+      <button class="menu-item" data-view="view-students" onclick="switchView('view-students')">
+        <span class="icon">👤</span><span class="label">生徒リスト</span>
+      </button>
+<button class="menu-item" data-view="view-logs" onclick="switchView('view-logs')">
+        <span class="icon">📋</span><span class="label">記録一覧・グラフ</span>
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      ・ブラウザだけで動くローカルアプリです。<br>
+      ・PC / iPhone / iPad のブラウザから利用できます。
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="app-container">
+      <header class="topbar">
+        <div class="topbar-title">
+          <h1 id="currentViewTitle">ホーム</h1>
+        </div>
+      </header>
+
+      <!-- ホーム -->
+      <section id="view-home" class="view view-active">
+        <div class="card">
+          <div class="card-title"><span class="emoji">🏠</span><span id="facilityBadge" class="facility-badge" style="display:none;"></span><span>ホームサマリー</span></div>
+          <div class="card-description">
+            <div id="installHint" class="hint-text" style="margin-top:10px; display:none;">
+              アプリとして追加できます（Android/PC: 右上のインストール / iPhone: 共有→「ホーム画面に追加」）
+            </div>
+            <div class="btn-row" style="margin-top:10px;">
+              <button class="btn" id="btnInstallPwa" style="display:none;">アプリとしてインストール</button>
+            </div>
+        
+            全体の状況と、生徒ごとの最新状況を一覧で確認できます。
+          </div>
+          <div class="kpi-row">
+            <div class="kpi-card">
+              <div class="kpi-label">登録生徒数</div>
+              <div class="kpi-value" id="dashStudents">0</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">記録件数</div>
+              <div class="kpi-value" id="dashSessions">0</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">平均成功率</div>
+              <div class="kpi-value" id="dashAvgRate">0%</div>
+            </div>
+          </div>
+          <div class="note-text" id="dashLastSession" style="margin-top:8px;">
+            まだDTT記録がありません。
+          </div>
+          <div class="note-text" style="margin-top:10px;font-weight:600;">
+            生徒ごとの最新状況
+          </div>
+          <div class="table-wrap"><table class="home-student-table" id="homeStudentTable"></table></div>
+        </div>
+      </section>
+
+      <!-- DTT記録 -->
+      <section id="view-session" class="view">
+        <div class="card">
+          <div class="card-title"><span class="emoji">✏️</span><span>DTT記録（＋ / － / P）</span></div>
+          <div class="card-description">
+            生徒・課題・ターゲット行動・講師・強化子を選び、試行を＋/－/Pで記録します。簡単なメモも残せます。
+          </div>
+
+        <div id="sessionErrors" class="errors" style="display:none;"></div>
+          <div id="sessionSteps" class="steps">
+            <div class="step"><span class="step-num">1</span><span class="step-txt">生徒</span></div>
+            <div class="step"><span class="step-num">2</span><span class="step-txt">課題</span></div>
+            <div class="step"><span class="step-num">3</span><span class="step-txt">標的</span></div>
+            <div class="step"><span class="step-num">4</span><span class="step-txt">試行</span></div>
+            <div class="step"><span class="step-num">5</span><span class="step-txt">保存</span></div>
+          </div>
+
+          <div class="trial-board">
+            <div class="trial-metrics">
+              <div class="metric">
+                <div class="metric-label">成功（＋）</div>
+                <div class="metric-value" id="countPlusBig">0</div>
+              </div>
+              <div class="metric">
+                <div class="metric-label">失敗（－）</div>
+                <div class="metric-value" id="countMinusBig">0</div>
+              </div>
+              <div class="metric">
+                <div class="metric-label">P</div>
+                <div class="metric-value" id="countPBig">0</div>
+              </div>
+              <div class="metric metric-wide">
+                <div class="metric-label">成功率</div>
+                <div class="metric-value"><span id="rateBig">0</span><span class="metric-suffix">%</span></div>
+              </div>
+            </div>
+
+            <div class="trial-actions">
+              <button class="btn btn-success btn-big" id="btnTrialPlus">＋ 成功</button>
+              <button class="btn btn-fail btn-big" id="btnTrialMinus">－ 失敗</button>
+              <button class="btn btn-prompt btn-big" id="btnTrialP">P</button>
+            </div>
+
+            <div class="trial-secondary">
+              <button class="btn btn-outline" id="btnUndoTrial">ひとつ戻す</button>
+              <button class="btn btn-outline" id="btnResetTrial">試行をリセット</button>
+            </div>
+          </div>
+
+          <div class="save-bar" id="saveBar">
+            <div class="save-bar-left">
+              <div class="save-bar-title">入力が終わったら保存</div>
+              <div class="save-bar-sub">迷ったらメモだけでもOK</div>
+            </div>
+            <button class="btn" id="btnSaveSessionSticky">保存する</button>
+          </div>
+
+
+          <div class="row">
+            <div>
+              <label>生徒</label>
+              <select id="childSelect">
+                <option value="">生徒を選択</option>
+              </select>
+            </div>
+            <div>
+              <label>課題</label>
+              <select id="taskSelect" onchange="onSessionTaskChange()">
+                <option value="">課題を選択</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label>ターゲット行動</label>
+              <select id="targetSelect">
+                <option value="">ターゲット行動を選択</option>
+              </select>
+              <div id="targetSdPreview" class="hint-text" style="margin-top:6px;">指示（SD）：<span id="targetSdText">-</span></div>
+            </div>
+            <div>
+              <label>講師</label>
+              <select id="teacherSelect">
+                <option value="">講師を選択</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>強化子（1位〜5位）</label>
+              <div class="reinforcer-ranks-row">
+                <div>
+                  <div class="reinforcer-rank-label">1位</div>
+                  <select id="reinforcer1"></select>
+                </div>
+                <div>
+                  <div class="reinforcer-rank-label">2位</div>
+                  <select id="reinforcer2"></select>
+                </div>
+                <div>
+                  <div class="reinforcer-rank-label">3位</div>
+                  <select id="reinforcer3"></select>
+                </div>
+                <div>
+                  <div class="reinforcer-rank-label">4位</div>
+                  <select id="reinforcer4"></select>
+                </div>
+                <div>
+                  <div class="reinforcer-rank-label">5位</div>
+                  <select id="reinforcer5"></select>
+                </div>
+              </div>
+              <div class="note-text">※ 強化子のマスタは「生徒情報・設定」で追加します。</div>
+            </div>
+            <div>
+              <label>トライアル目標回数</label>
+              <input id="trialGoal" type="number" value="10" min="1" max="30">
+              <label style="margin-top:6px;">プロンプトの種類（任意）</label>
+              <select id="promptType">
+                <option value="">未指定</option>
+                <option value="全身体プロンプト">全身体プロンプト</option>
+                <option value="部分身体プロンプト">部分身体プロンプト</option>
+                <option value="ジェスチャー">ジェスチャー</option>
+                <option value="口頭プロンプト">口頭プロンプト</option>
+                <option value="その他">その他</option>
+              </select>
+            </div>
+          </div>
+
+          <label style="margin-top:10px;">トライアル入力（＋ / － / P）</label>
+          </div>
+
+          <div style="margin-top:8px;">
+            <label>今回セッションの並び</label>
+            <div id="trialList" class="trial-list trial-list-empty">まだ入力はありません。</div>
+          </div>
+
+          <div class="kpi-row">
+            <div class="kpi-card">
+              <div class="kpi-label">現在の成功率</div>
+              <div class="kpi-value" id="kpiRate">0%</div>
+              <div class="progress-bar"><div class="progress-fill" id="kpiProgress"></div></div>
+              <div class="kpi-sub" id="kpiDetail">成功 0 回 / 0 回中</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">トライアル状況</div>
+              <div class="kpi-value" id="kpiCount">0 / 0</div>
+              <div class="kpi-sub">目標回数に対する進み具合</div>
+            </div>
+          </div>
+
+          <label style="margin-top:10px;">メモ（任意）</label>
+          <textarea id="sessionNote" placeholder="例：今日は集中しやすく、プロンプトを減らしても成功が維持できた　など"></textarea>
+
+          <button class="btn btn-save" onclick="saveSession()">このDTT記録を保存</button>
+        </div>
+      </section>
+
+      <!-- 生徒情報・設定 -->
+      
+<section id="view-master" class="view">
+  <div class="card">
+    <div class="card-title"><span class="emoji">🧩</span>生徒情報・設定</div>
+    <div class="card-description">
+      生徒・講師・課題・ターゲット行動・強化子を登録します。<span class="muted">（現場で迷わないよう、関連するものをまとめて配置しました）</span>
+    </div>
+    <div class="panel panel-wide" style="margin-top:14px;">
+      <div class="panel-hd">
+        <div class="panel-title">🏢 施設・アプリ設定</div>
+        <div class="panel-sub">施設名はヘッダーに表示されます（端末ごとに保存）。アーカイブは復元可能です。</div>
+      </div>
+      <div class="panel-body">
+        <div class="target-grid" style="grid-template-columns: 1fr auto;">
+          <div>
+            <div class="form-label">施設名（表示用）</div>
+            <input class="input" id="facilityNameInput" placeholder="例：ビオトープ / 北大前" />
+          </div>
+          <div class="target-grid-actions" style="align-items:end;">
+            <button class="btn btn-outline" id="btnSaveFacility">保存</button>
+          </div>
+        </div>
+        <div class="btn-row" style="margin-top:10px;">
+          <label class="chk"><input type="checkbox" id="toggleShowArchived"> アーカイブ（非表示データ）も表示する</label>
+        </div>
+        <div class="hint-text">※「×」は削除ではなく<strong>アーカイブ</strong>（復元可能）として扱います。</div>
+      </div>
+    </div>
+
+
+    <div class="panel-grid">
+      <!-- Students -->
+      <div class="panel">
+        <div class="panel-hd">
+          <div class="panel-title">👦 生徒</div>
+          <div class="panel-sub">例：Aくん</div>
+        </div>
+        <div class="panel-body">
+          <div class="inline-form">
+            <input class="input" id="newStudentName" placeholder="生徒の追加（例：Aくん）" />
+            <button class="btn btn-primary btn-compact" id="btnAddStudent">登録</button>
+          </div>
+          <div class="panel-list" id="studentList">まだ登録がありません。</div><div class="master-list-hint">※タグをクリックで編集、×で削除</div>
+        </div>
+      </div>
+
+      <!-- Teachers -->
+      <div class="panel">
+        <div class="panel-hd">
+          <div class="panel-title">🧑‍🏫 講師</div>
+          <div class="panel-sub">例：中安先生</div>
+        </div>
+        <div class="panel-body">
+          <div class="inline-form">
+            <input class="input" id="newTeacherName" placeholder="講師の追加（例：中安先生）" />
+            <button class="btn btn-primary btn-compact" id="btnAddTeacher">登録</button>
+          </div>
+          <div class="panel-list" id="teacherList">まだ登録がありません。</div><div class="master-list-hint">※タグをクリックで編集、×で削除</div>
+        </div>
+      </div>
+
+      <!-- Tasks -->
+      <div class="panel">
+        <div class="panel-hd">
+          <div class="panel-title">🧩 課題</div>
+          <div class="panel-sub">例：動作模倣</div>
+        </div>
+        <div class="panel-body">
+          <div class="inline-form">
+            <input class="input" id="newTaskName" placeholder="課題の追加（例：動作模倣）" />
+            <button class="btn btn-primary btn-compact" id="btnAddTask">登録</button>
+          </div>
+          <div class="panel-list" id="taskList">まだ登録がありません。</div><div class="master-list-hint">※タグをクリックで編集、×で削除</div>
+        </div>
+      </div>
+
+      <!-- Reinforcers -->
+      <div class="panel">
+        <div class="panel-hd">
+          <div class="panel-title">🍪 強化子</div>
+          <div class="panel-sub">例：タブレット / 好きなお菓子</div>
+        </div>
+        <div class="panel-body">
+          <div class="inline-form">
+            <input class="input" id="newReinforcerName" placeholder="強化子の追加（例：タブレット / 好きなお菓子）" />
+            <button class="btn btn-primary btn-compact" id="btnAddReinforcer">登録</button>
+          </div>
+          <div class="panel-list" id="reinforcerList">まだ登録がありません。</div><div class="master-list-hint">※タグをクリックで編集、×で削除</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Targets -->
+    <div class="panel panel-wide">
+      <div class="panel-hd">
+        <div class="panel-title">🎯 ターゲット行動（課題に紐づけ）</div>
+        <div class="panel-sub">課題を選んでターゲット行動と指示（SD）を登録します。</div>
+      </div>
+      <div class="panel-body">
+        <div class="target-grid">
+          <div>
+            <div class="form-label">課題</div>
+            <select class="select" id="targetTaskSelect"></select>
+          </div>
+          <div>
+            <div class="form-label">ターゲット行動</div>
+            <input class="input" id="newTargetName" placeholder="例：右手を上に上げる" />
+          </div>
+          <div>
+            <div class="form-label">指示（SD）</div>
+            <input class="input" id="newTargetSD" placeholder="例：「こうして」" />
+          </div>
+          <div class="target-grid-actions">
+            <button class="btn btn-primary" id="btnAddTarget">ターゲット行動を登録</button>
+          </div>
+        </div>
+
+        <details class="details" open>
+          <summary>登録済みターゲット（課題ごと）</summary>
+          <div class="panel-list" id="targetList">まだ登録がありません。</div><div class="master-list-hint">※タグをクリックで編集、×で削除（課題との紐づけも更新されます）</div>
+        </details>
+
+        <details class="details">
+          <summary>標的行動の指示（SD）を編集</summary>
+          <div class="edit-sd">
+            <div class="form-label">標的行動</div>
+            <select class="select" id="editTargetSelect"></select>
+            <div class="form-label">指示（SD）</div>
+            <input class="input" id="editTargetSD" placeholder="例：「こうして」" />
+            <div class="btn-row" style="margin-top:10px;">
+              <button class="btn btn-outline" id="btnSaveTargetSD">保存</button>
+            </div>
+            <div class="hint-text">空欄で保存すると、SDは未設定になります。</div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Backup -->
+    <div class="panel panel-wide">
+      <div class="panel-hd">
+        <div class="panel-title">💾 データのバックアップ / 復元</div>
+        <div class="panel-sub">別端末へ移す、万が一に備えるときに使います。</div>
+      </div>
+      <div class="panel-body">
+        <div class="btn-row">
+          <button class="btn btn-outline" id="btnBackup">バックアップをダウンロード</button>
+          <label class="btn btn-outline" for="restoreFile" style="cursor:pointer;">バックアップから復元</label>
+          <input type="file" id="backupFileInput" accept=".json" onchange="importBackup(event)" style="display:none;">
+          <button class="btn btn-outline" id="btnResetAll">すべて初期化</button>
+        </div>
+        <div class="hint-text">※復元すると、現在のデータは上書きされます。</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+      
+      <!-- 生徒リスト -->
+      <section id="view-students" class="view">
+        <div class="card">
+          <div class="card-title"><span class="emoji">👤</span><span>生徒リスト</span></div>
+          <div class="card-description">
+            生徒ごとの基本情報（学年・メモ・タグなど）をまとめて管理します。<br>
+            ※ 記録データとは別に保存されます（ブラウザ内）。
+          </div>
+
+          <div class="form-grid" style="margin-top:10px;">
+            <div class="form-field">
+              <label class="form-label">生徒</label>
+              <select id="profileStudentSelect" class="select"></select>
+              <div class="hint-text">「生徒情報・設定」で登録した生徒が表示されます。</div>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label">学年</label>
+              <input id="profileGrade" class="input" placeholder="例：小4 / 中1 / 高2 / 大人など">
+            </div>
+
+            <div class="form-field">
+              <label class="form-label">タグ（カンマ区切り）</label>
+              <input id="profileTags" class="input" placeholder="例：視覚優位, 音に敏感, ルーティン">
+            </div>
+
+            <div class="form-field">
+              <label class="form-label">メモ</label>
+              <textarea id="profileNote" class="textarea" rows="5" placeholder="特性・注意点・好きな強化子・配慮など"></textarea>
+            </div>
+          </div>
+
+          <div class="btn-row" style="margin-top:12px;">
+            <button class="btn" id="btnSaveProfile">保存</button>
+            <button class="btn btn-outline" id="btnClearProfile">クリア</button>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="note-text" style="font-weight:600;margin-bottom:6px;">登録状況</div>
+          <div id="profileSummary" class="note-text">生徒を選択すると表示されます。</div>
+
+          <div class="divider"></div>
+
+          <div class="note-text" style="font-weight:600;margin-bottom:6px;">生徒一覧（クリックで編集）</div>
+          <div id="profileCardList" class="profile-card-list"></div>
+        </div>
+      </section>
+
+
+<!-- 記録一覧・グラフ -->
+      <section id="view-logs" class="view">
+        <div class="row" style="margin-bottom:8px;align-items:flex-end;">
+          <div style="max-width:220px;">
+            <label>生徒フィルタ</label>
+            <select id="graphStudentFilter" onchange="renderSessionList();updateSessionChart();updateAnalysis();updateStudentMiniDashboard();">
+              <option value="">すべての生徒</option>
+            </select>
+          </div>
+          <div style="max-width:220px;">
+            <label>課題フィルタ</label>
+            <select id="logTaskFilter" onchange="renderSessionList();updateSessionChart();updateAnalysis();updateStudentMiniDashboard();">
+              <option value="">すべての課題</option>
+            </select>
+          </div>
+          <div style="max-width:220px;">
+            <label>ターゲット行動フィルタ</label>
+            <select id="logTargetFilter" onchange="renderSessionList();updateSessionChart();updateAnalysis();updateStudentMiniDashboard();">
+              <option value="">すべてのターゲット</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="emoji">👤</span><span>生徒ミニダッシュボード</span></div>
+    <div class="btn-row" style="margin-top:10px;">
+      <button class="btn btn-outline" id="btnExportCSV">CSV出力</button>
+    </div>
+
+          <div class="card-description">
+            選択中の生徒について、最近の状況と課題・ターゲットごとの簡易まとめを表示します。
+          </div>
+          <div id="studentMiniSummary" class="note-text">生徒フィルタで1名を選択すると、ここに概要が表示されます。</div>
+          <table class="mini-dashboard-table" id="studentMiniTable"></table>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="emoji">📋</span><span>記録一覧</span></div>
+          <div class="card-description">
+            生徒・課題・ターゲット行動ごとに記録を確認できます。（メモ・強化子・プロンプト種類も表示）
+          </div>
+          <div style="text-align:right;margin-bottom:4px;">
+            <button class="btn btn-outline" onclick="exportCsv()">CSVエクスポート</button>
+            <button class="btn btn-outline" onclick="openPdfReport()">PDFレポート（印刷用）</button>
+          </div>
+          <div id="sessionList"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span class="emoji">📈</span><span>成功率の推移グラフ</span>
+          </div>
+          <div class="card-description">
+            フィルタに合わせた成功率の推移を確認できます。
+          </div>
+          <div style="text-align:right;margin-top:4px;">
+            <button class="btn btn-outline" onclick="printChart()">グラフを印刷</button>
+          </div>
+          <canvas id="sessionChart" height="220" style="margin-top:8px;"></canvas>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="emoji">🤖</span><span>簡易分析（どの回でミスが多いか）</span></div>
+          <div class="card-description">
+            現在のフィルタ条件に対して、何回目で「－」が出やすいかを自動集計します。
+          </div>
+          <div id="analysisSummary" class="note-text">まだデータがありません。</div>
+          <div class="trial-table-wrapper">
+            <table class="analysis-table" id="analysisTable"></table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+  <script src="./assets/app.js?v=1768435147"></script>
+  <div id="toastHost" class="toast-host" aria-live="polite"></div>
+</body>
+</html>
